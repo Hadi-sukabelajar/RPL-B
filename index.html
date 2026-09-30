@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="id" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>X RPL B - SMKN 2 Subang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <canvas id="codeRain" aria-hidden="true"></canvas>
+    <div class="progress-bar" id="progressBar"></div>
+    <button class="back-top" id="backTop" type="button" title="Kembali ke atas">
+      &#8593;
+    </button>
+    <div class="toast" id="toast">Siap!</div>
+
+    <div id="music-player">
+      <button
+        class="mp-collapsed-btn"
+        type="button"
+        onclick="expandPlayer()"
+        title="Buka music player"
+      >
+        &#127925;
+      </button>
+      <div class="mp-header" onclick="collapsePlayer()">
+        <div class="mp-header-left">
+          <div class="mp-icon-dot" id="mpDot"></div>
+          <span class="mp-label">Rpl-B PlayList</span>
+        </div>
+        <button class="mp-collapse-btn" type="button" title="Minimize">
+          &#8722;
+        </button>
+      </div>
+      <div class="mp-body">
+        <div class="mp-viz paused" id="mpViz">
+          <div class="mp-viz-bar"></div>
+          <div class="mp-viz-bar"></div>
+          <div class="mp-viz-bar"></div>
+          <div class="mp-viz-bar"></div>
+          <div class="mp-viz-bar"></div>
+          <div class="mp-viz-bar"></div>
+          <div class="mp-viz-bar"></div>
+          <div class="mp-viz-bar"></div>
+        </div>
+        <div class="mp-track-info">
+          <div class="mp-track-name" id="mpTrackName">Memuat playlist...</div>
+          <div class="mp-track-artist" id="mpTrackArtist">X RPL B</div>
+          <div class="mp-track-num" id="mpTrackNum">- / -</div>
+        </div>
+        <div class="mp-progress-wrap">
+          <div
+            class="mp-progress-bar"
+            id="mpProgressBar"
+            onclick="mpSeek(event)"
+          >
+            <div class="mp-progress-fill" id="mpProgressFill"></div>
+          </div>
+          <div class="mp-time-row">
+            <span id="mpCurrent">0:00</span>
+            <span id="mpDuration">0:00</span>
+          </div>
+        </div>
+        <div class="mp-controls">
+          <button
+            class="mp-ctrl-btn sm"
+            id="mpLoopBtn"
+            type="button"
+            onclick="mpToggleLoop()"
+            title="Loop"
+          >
+            &#128257;
+          </button>
+          <button
+            class="mp-ctrl-btn md"
+            type="button"
+            onclick="mpPrev()"
+            title="Sebelumnya"
+          >
+            &#9198;
+          </button>
+          <button
+            class="mp-ctrl-btn lg"
+            id="mpPlayBtn"
+            type="button"
+            onclick="mpTogglePlay()"
+            title="Play/Pause"
+          >
+            &#9654;
+          </button>
+          <button
+            class="mp-ctrl-btn md"
+            type="button"
+            onclick="mpNext()"
+            title="Berikutnya"
+          >
+            &#9197;
+          </button>
+          <button
+            class="mp-ctrl-btn sm"
+            id="mpShuffleBtn"
+            type="button"
+            onclick="mpToggleShuffle()"
+            title="Acak"
+          >
+            &#128256;
+          </button>
+        </div>
+        <div class="mp-volume-row">
+          <span class="mp-vol-icon" id="mpVolIcon">&#128266;</span>
+          <input
+            class="mp-vol-slider"
+            id="mpVolSlider"
+            type="range"
+            min="0"
+            max="1"
+            step="0.02"
+            value="0.7"
+            oninput="mpSetVolume(this.value)"
+          />
+        </div>
+        <div class="mp-dots" id="mpDots"></div>
+        <div class="mp-upload-wrap">
+          <label class="mp-upload-label" for="mpFileInput"
+            >&#43; Tambah lagu ke playlist</label
+          >
+          <input
+            id="mpFileInput"
+            type="file"
+            accept="audio/*"
+            multiple
+            onchange="mpAddTracks(event)"
+          />
+        </div>
+      </div>
+    </div>
+
+    <nav>
+      <a href="#home" class="nav-logo"
+        ><span>X RPL B</span><span class="badge">STEMPERT</span></a
+      >
+      <ul class="nav-links">
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="#tentang">Tentang kami</a></li>
+        <li><a href="#anggota">Taruna/i</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#kegiatan">Kegiatan</a></li>
+        <li><a href="#kontak">Kontak</a></li>
+      </ul>
+      <div class="nav-right">
+        <button
+          class="icon-btn"
+          id="musicBtn"
+          type="button"
+          onclick="mpTogglePlay()"
+          title="Play/Pause"
+        >
+          &#9835;
+        </button>
+        <button
+          class="icon-btn"
+          id="themeBtn"
+          type="button"
+          onclick="toggleTheme()"
+          title="Ganti tema"
+        >
+          &#9728;
+        </button>
+        <button
+          class="hamburger"
+          type="button"
+          onclick="toggleMobileNav()"
+          title="Menu"
+        >
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobileNav">
+      <a href="#home" onclick="toggleMobileNav()">Home</a>
+      <a href="#tentang" onclick="toggleMobileNav()">Tentang Kami</a>
+      <a href="#anggota" onclick="toggleMobileNav()">Taruna/i</a>
+      <a href="#gallery" onclick="toggleMobileNav()">Gallery</a>
+      <a href="#kegiatan" onclick="toggleMobileNav()">Kegiatan</a>
+      <a href="#kontak" onclick="toggleMobileNav()">Kontak</a>
+    </div>
+    
+    <section id="home">
+      <div class="hero-layout">
+        <div class="hero-copy">
+          <div class="eyebrow">&#10022; SMKN 2 Subang - 2025/2026</div>
+          <h1 class="hero-title">
+            <span class="grad">Software Engineering </span>
+            <span class="hero-sub">Rekayasa Perangkat Lunak B</span>
+          </h1>
+          <p class="hero-desc">
+            Keluarga kecil yang solid - <strong>38 taruna/i</strong> penuh
+            semangat, kreativitas, dan dedikasi tinggi untuk bertumbuh bersama
+            di dunia <span class="grad">teknologi</span>.
+          </p>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              &#128101;<span class="stat-num" data-target="38">0</span
+              ><span class="stat-label">Taruna/i</span>
+            </div>
+            <div class="hero-stat">
+              &#127979;<span class="stat-num" data-target="1">0</span
+              ><span class="stat-label">Kelas</span>
+            </div>
+            <div class="hero-stat">
+              &#9889;<span class="stat-num" data-target="24">0</span
+              ><span class="stat-label">Angkatan</span>
+            </div>
+          </div>
+          <div class="hero-btns">
+            <a class="btn-primary" href="#tentang">&#10022; Kenali Kami</a>
+            <a class="btn-ghost" href="#gallery">&#128248; Gallery</a>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="orbit"></div>
+          <div class="hero-chip html">HTML</div>
+          <div class="hero-chip css">CSS</div>
+          <div class="hero-chip js">JavaScript</div>
+          <div class="hero-chip python">Python</div>
+          <div class="hero-chip g">GIT</div>
+          <div class="code-window">
+            <div class="window-head"><span></span><span></span><span></span></div>
+            <span class="code-line">const kelas = "X RPL B";</span>
+            <span class="code-line">buildTeam(38, "solid");</span>
+            <span class="code-line">deploy("future-ready");</span>
+            <span class="code-line">console.log("STEMPERT");</span>
+          </div>
+          <div class="terminal-card">
+            <strong>// XRPL-B STATUS</strong>
+            <span>&gt; teamwork: online</span>
+            <span>&gt; creativity: loaded</span>
+            <span>&gt; future: compiling...</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tentang">
+      <div class="section-header">
+        <div class="section-tag">&#10022; WHO WE ARE</div>
+        <h2 class="section-title">Tentang <span class="grad">Kami</span></h2>
+        <p class="section-desc">
+          Generasi penerus yang siap menaklukkan dunia digital dengan kode,
+          desain, dan kerja sama yang kuat.
+        </p>
+      </div>
+      <div class="about-grid">
+        <div class="about-img">
+          <img
+            src="assets/images/family-rplb.jpg"
+            alt="Foto kelas X RPL B SMKN 2 Subang"
+            onerror="this.style.display = 'none'"
+          />
+          <div class="about-corner">2025/2026</div>
+        </div>
+        <div class="about-text">
+          <h2>Kelas <span class="grad">X RPL B</span></h2>
+          <p>
+            Kami adalah kelas X RPL B dari SMKN 2 Subang - komunitas belajar
+            yang solid, kreatif, dan siap berkembang bersama.
+          </p>
+          <p>
+            Program Keahlian Rekayasa Perangkat Lunak membekali kami dengan
+            kemampuan coding, desain sistem, dan pengembangan aplikasi yang
+            relevan dengan kebutuhan industri.
+          </p>
+          <div class="about-tags">
+            <span class="about-tag">&#128187; Programming</span>
+            <span class="about-tag">&#127760; Web Dev</span>
+            <span class="about-tag">&#129309; Teamwork</span>
+            <span class="about-tag">&#128640; Innovation</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="anggota">
+      <div class="section-header">
+        <div class="section-tag">&#10022; OUR FAMILY</div>
+        <h2 class="section-title">38 <span class="grad">Taruna/i</span></h2>
+        <p class="section-desc">
+          Setiap wajah, setiap cerita, satu keluarga besar X RPL B.
+        </p>
+      </div>
+      <div class="search-bar">
+        <span>&#128269;</span>
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Cari nama taruna/i..."
+          oninput="filterMembers()"
+        />
+      </div>
+      <div class="filter-bar">
+        <button
+          class="filter-btn active"
+          type="button"
+          onclick="filterByRole('all', this)"
+        >
+          Semua
+        </button>
+        <button
+          class="filter-btn"
+          type="button"
+          onclick="filterByRole('Ketua Kelas', this)"
+        >
+          Ketua
+        </button>
+        <button
+          class="filter-btn"
+          type="button"
+          onclick="filterByRole('Wakil Ketua', this)"
+        >
+          Wakil
+        </button>
+        <button
+          class="filter-btn"
+          type="button"
+          onclick="filterByRole('Sekertaris', this)"
+        >
+          Sekertaris
+        </button>
+        <button
+          class="filter-btn"
+          type="button"
+          onclick="filterByRole('Bendahara', this)"
+        >
+          Bendahara
+        </button>
+        <button
+          class="filter-btn"
+          type="button"
+          onclick="filterByRole('Anggota', this)"
+        >
+          Anggota
+        </button>
+      </div>
+      <div class="coverflow-wrap">
+        <div class="coverflow-stage">
+          <div class="coverflow-track" id="membersGrid"></div>
+        </div>
+        <div class="coverflow-controls">
+          <button class="coverflow-btn" type="button" onclick="prevMember()">
+            &lt;
+          </button>
+          <div class="coverflow-count" id="memberCount">1 / 38</div>
+          <button class="coverflow-btn" type="button" onclick="nextMember()">
+            &gt;
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <div class="section-header">
+        <div class="section-tag">&#10022; MEMORIES</div>
+        <h2 class="section-title"><span class="grad">Gallery</span></h2>
+        <p class="section-desc">
+          Momen-momen berharga yang mengabadikan perjalanan kita bersama.
+        </p>
+      </div>
+      <div class="coverflow-wrap">
+        <div class="coverflow-stage">
+          <div class="coverflow-track" id="galleryGrid"></div>
+        </div>
+        <div class="coverflow-controls">
+          <button class="coverflow-btn" type="button" onclick="prevGallery()">
+            &lt;
+          </button>
+          <div class="coverflow-count" id="galleryCount">1 / 32</div>
+          <button class="coverflow-btn" type="button" onclick="nextGallery()">
+            &gt;
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="kegiatan">
+      <div class="section-header">
+        <div class="section-tag">&#10022; ACTIVITIES</div>
+        <h2 class="section-title"><span class="grad">Kegiatan</span></h2>
+        <p class="section-desc">
+          Perjalanan aktivitas kelas yang penuh makna dan pengalaman berharga.
+        </p>
+      </div>
+      <div class="timeline" id="timeline"></div>
+    </section>
+
+    <section id="kontak">
+      <div class="section-header">
+        <div class="section-tag">&#10022; GET IN TOUCH</div>
+        <h2 class="section-title"><span class="grad">Kontak</span></h2>
+        <p class="section-desc">
+          Ada pertanyaan atau ingin berkolaborasi? Kami senang mendengar kabar
+          baik.
+        </p>
+      </div>
+      <div class="kontak-grid">
+        <div class="kontak-info">
+          <h3>Hubungi <br />Kami</h3>
+          <p>
+            Kami terbuka untuk kerja sama, diskusi, dan segala bentuk komunikasi
+            positif.
+          </p>
+          <div class="kontak-links">
+            <a
+              class="kontak-link"
+              href="https://maps.google.com/?q=SMKN+2+Subang+Jawa+Barat"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="kl-icon">&#128205;</div>
+              <div class="kl-text">
+                <span class="kl-label">Lokasi</span
+                ><span class="kl-value">SMKN 2 Subang, Jawa Barat</span>
+              </div>
+            </a>
+            <a
+              class="kontak-link"
+              href="https://www.instagram.com/cyberclass.xb/?hl=en"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="kl-icon">&#128247;</div>
+              <div class="kl-text">
+                <span class="kl-label">Instagram</span
+                ><span class="kl-value">@xrplb_smkn2subang</span>
+              </div>
+            </a>
+            <a class="kontak-link" href="mailto:info@smkn-2sbg.sch.id">
+              <div class="kl-icon">&#9993;</div>
+              <div class="kl-text">
+                <span class="kl-label">Email sekolah</span
+                ><span class="kl-value">info@smkn-2sbg.sch.id</span>
+              </div>
+            </a>
+            <a
+              class="kontak-link"
+              href="https://wa.me/6283101314147"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="kl-icon">&#128172;</div>
+              <div class="kl-text">
+                <span class="kl-label">WhatsApp (admin web)</span
+                ><span class="kl-value">X RPL B Official</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="kontak-form">
+          <div class="form-group">
+            <label for="contactName">Nama Lengkap</label>
+            <input
+              id="contactName"
+              type="text"
+              placeholder="Masukkan nama kamu..."
+            />
+          </div>
+          <div class="form-group">
+            <label for="contactEmail">Email</label>
+            <input
+              id="contactEmail"
+              type="email"
+              placeholder="email@contoh.com"
+            />
+          </div>
+          <div class="form-group">
+            <label for="contactMessage">Pesan</label>
+            <textarea
+              id="contactMessage"
+              placeholder="Tulis pesanmu di sini..."
+            ></textarea>
+          </div>
+          <button
+            class="btn-primary"
+            type="button"
+            style="width: 100%"
+            onclick="sendMsg()"
+          >
+            &#10022; Kirim Pesan
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-logo grad">
+        X RPL B
+      </div>
+      <p class="footer-text">
+        SMKN 2 Subang - Web Rekayasa Perangkat Lunak B<br />
+        Dibuat oleh <b><i>Team X RPL B</i></b> - 2026
+      </p>
+    </footer>
+
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+      <div class="modal">
+        <button class="modal-close" type="button" onclick="closeModal()">
+          X
+        </button>
+        <div class="modal-avatar" id="modalAvatar"></div>
+        <div class="modal-name" id="modalName"></div>
+        <div id="modalRole"></div>
+        <div class="modal-info" id="modalInfo"></div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
