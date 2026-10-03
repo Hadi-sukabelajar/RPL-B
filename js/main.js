@@ -406,7 +406,7 @@
           const offset = shortOffset(i, activeGallery, galleryItems.length);
           slide.className = `coverflow-slide ${coverClass(offset)}`;
           slide.style.transform = coverTransform(offset);
-          slide.onclick = () => setGallerySlide(i);
+          slide.onclick = () => (i === activeGallery ? openLightbox(i) : setGallerySlide(i));
         });
         $("galleryCount").textContent = `${activeGallery + 1} / ${galleryItems.length}`;
       }
@@ -426,6 +426,77 @@
       function setGallerySlide(i) { activeGallery = i; applyGalleryCoverflow(); }
       function nextGallery() { activeGallery = (activeGallery + 1) % galleryItems.length; applyGalleryCoverflow(); }
       function prevGallery() { activeGallery = (activeGallery - 1 + galleryItems.length) % galleryItems.length; applyGalleryCoverflow(); }
+
+      // ============================================================
+      // LIGHTBOX GALLERY (klik foto di tengah untuk memperbesar)
+      // ============================================================
+      let lightboxEl = null;
+      let lbTouchX = null;
+
+      function buildLightbox() {
+        lightboxEl = document.createElement("div");
+        lightboxEl.className = "lightbox";
+        lightboxEl.setAttribute("role", "dialog");
+        lightboxEl.setAttribute("aria-modal", "true");
+        lightboxEl.innerHTML = `
+          <button class="lightbox-close" type="button" aria-label="Tutup">X</button>
+          <button class="lightbox-nav prev" type="button" aria-label="Foto sebelumnya">&lt;</button>
+          <figure class="lightbox-figure">
+            <img class="lightbox-img" alt="">
+            <figcaption class="lightbox-caption">
+              <span class="lightbox-title"></span>
+              <span class="lightbox-count"></span>
+            </figcaption>
+          </figure>
+          <button class="lightbox-nav next" type="button" aria-label="Foto berikutnya">&gt;</button>
+        `;
+        document.body.appendChild(lightboxEl);
+
+        lightboxEl.addEventListener("click", (e) => { if (e.target === lightboxEl) closeLightbox(); });
+        lightboxEl.querySelector(".lightbox-close").addEventListener("click", closeLightbox);
+        lightboxEl.querySelector(".prev").addEventListener("click", () => lightboxStep(-1));
+        lightboxEl.querySelector(".next").addEventListener("click", () => lightboxStep(1));
+
+        // geser kiri/kanan di HP
+        lightboxEl.addEventListener("touchstart", (e) => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+        lightboxEl.addEventListener("touchend", (e) => {
+          if (lbTouchX === null) return;
+          const dx = e.changedTouches[0].clientX - lbTouchX;
+          lbTouchX = null;
+          if (Math.abs(dx) > 50) lightboxStep(dx < 0 ? 1 : -1);
+        });
+      }
+
+      function updateLightbox() {
+        const item = galleryItems[activeGallery];
+        const img = lightboxEl.querySelector(".lightbox-img");
+        img.src = item.img;
+        img.alt = item.title;
+        lightboxEl.querySelector(".lightbox-title").textContent = item.title;
+        lightboxEl.querySelector(".lightbox-count").textContent = `${activeGallery + 1} / ${galleryItems.length}`;
+      }
+
+      function openLightbox(i) {
+        if (!lightboxEl) buildLightbox();
+        activeGallery = i;
+        applyGalleryCoverflow();
+        updateLightbox();
+        lightboxEl.classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeLightbox() {
+        if (!lightboxEl) return;
+        lightboxEl.classList.remove("open");
+        document.body.style.overflow = "";
+      }
+
+      function isLightboxOpen() { return !!lightboxEl && lightboxEl.classList.contains("open"); }
+
+      function lightboxStep(dir) {
+        if (dir > 0) nextGallery(); else prevGallery();
+        updateLightbox();
+      }
 
       function renderTimeline() {
         $("timeline").innerHTML = activities.map((a) => `
@@ -566,19 +637,41 @@
       function collapsePlayer() { $("music-player").classList.add("collapsed"); }
       function expandPlayer() { $("music-player").classList.remove("collapsed"); }
 
+      // Browser memblokir suara otomatis sebelum pengunjung berinteraksi.
+      // Jadi: coba play langsung, kalau diblokir -> nyala di sentuhan/klik/tombol pertama.
+      const MP_UNLOCK_EVENTS = ["pointerdown", "mousedown", "click", "touchend", "keydown"];
+
+      function mpRemoveUnlockListeners() {
+        MP_UNLOCK_EVENTS.forEach((ev) => document.removeEventListener(ev, mpUnlockAutoplay));
+        mpAutoplayListenerAdded = false;
+      }
+
+      function mpAddUnlockListeners() {
+        if (mpAutoplayListenerAdded) return;
+        MP_UNLOCK_EVENTS.forEach((ev) => document.addEventListener(ev, mpUnlockAutoplay));
+        mpAutoplayListenerAdded = true;
+      }
+
       function mpTryAutoplay() {
-        mpAudio.play().then(() => { mpIsPlaying = true; mpUpdateUI(); }).catch(() => { mpUpdateUI(); });
+        mpAudio.play()
+          .then(() => { mpIsPlaying = true; mpUpdateUI(); mpRemoveUnlockListeners(); })
+          .catch(() => {
+            mpUpdateUI();
+            mpAddUnlockListeners();
+            showToast("🎵 Ketuk layar untuk menyalakan musik");
+          });
       }
 
       function mpUnlockAutoplay() {
-        if (!mpAutoplayListenerAdded) return;
-        if (mpAudio.paused) {
-          mpAudio.play().then(() => { mpIsPlaying = true; mpUpdateUI(); showToast("▶ " + playlist[mpCurrentTrack].title); }).catch(() => {});
-        }
-        document.removeEventListener("click", mpUnlockAutoplay);
-        document.removeEventListener("touchstart", mpUnlockAutoplay);
-        document.removeEventListener("keydown", mpUnlockAutoplay);
-        mpAutoplayListenerAdded = false;
+        if (!mpAudio.paused) { mpRemoveUnlockListeners(); return; }
+        mpAudio.play()
+          .then(() => {
+            mpIsPlaying = true;
+            mpUpdateUI();
+            mpRemoveUnlockListeners();
+            showToast("▶ " + playlist[mpCurrentTrack].title);
+          })
+          .catch(() => { /* gesture belum dianggap valid, listener tetap aktif & coba lagi */ });
       }
 
       function toggleTheme() {
@@ -628,7 +721,12 @@
       });
 
       addEventListener("keydown", (event) => {
-        if (event.key === "Escape") closeModal();
+        if (event.key === "Escape") { closeModal(); closeLightbox(); }
+        if (isLightboxOpen()) {
+          if (event.key === "ArrowRight") lightboxStep(1);
+          if (event.key === "ArrowLeft") lightboxStep(-1);
+          return;
+        }
         if (document.activeElement.id === "searchInput") return;
         if (event.key === "ArrowRight") { nextMember(); nextGallery(); }
         if (event.key === "ArrowLeft") { prevMember(); prevGallery(); }
@@ -638,13 +736,13 @@
         renderMembers();
         renderGallery();
         renderTimeline();
-        mpLoadTrack(0, false);
-        mpTryAutoplay();
-        mpAutoplayListenerAdded = true;
-        document.addEventListener("click", mpUnlockAutoplay);
-        document.addEventListener("touchstart", mpUnlockAutoplay);
-        document.addEventListener("keydown", mpUnlockAutoplay);
         document.querySelectorAll(".stat-num").forEach(animateCounter);
         $("backTop").addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-        showToast("▶ Musik akan diputar otomatis");
       });
+
+      function mpInit() {
+        mpLoadTrack(0, false);
+        mpTryAutoplay();
+      }
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mpInit);
+      else mpInit();
