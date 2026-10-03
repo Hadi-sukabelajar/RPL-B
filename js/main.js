@@ -5,10 +5,10 @@
   const ctx = canvas.getContext("2d");
   const colors = ["#65d7c8", "#8ea7ff", "#ffc56f", "#ff7f73", "#a8eddb"];
   const snippets = [
-    'const team = "X RPL B";', "function buildFuture() {", 'return "solid & creative";',
+    'const team = "RPL B";', "function buildFuture() {", 'return "solid & creative";',
     "for (let i = 0; i < 38; i++)", 'console.log("STEMPERT 2025");', "if (semangat === true) {",
     'document.querySelector(".kelas")', "async function deploy() {", "await launchProject();",
-    "export default class XRPLB {", "npm run build --production", 'git commit -m "ready 🚀"',
+    "export default class RPLB {", "npm run build --production", 'git commit -m "ready 🚀"',
     "SELECT * FROM taruna_rplb", 'import { useState } from "react"', '<div class="hero-section">',
     "border-radius: 8px;", "display: flex; gap: 12px;", "background: linear-gradient(",
     "@media (max-width: 768px)", "def train_model(data):", 'print("Hello, World!")',
@@ -17,8 +17,8 @@
     ".then(res => res.json())",'sudo apt update && sudo apt upgrade', 'localStorage.setItem("kelas")', "position: absolute; z-index:",
     "transform: translateY(-3px)", "const router = express.Router()", "app.listen(3000, () => {",
     "schema.validate(formData)", "try { await connectDB() }", "catch (err) { console.error }",'SABISA BISA PASTI BISA KUDU BISA LUAR BIASA MABOK CODING', "const [count, setCount] = useState(0)", "return <div>{count}</div>", "npm install --save react-router-dom",
-    "01001000 01100101 01111001",'pkg install radit-jomok', "0xFF 0b1010 NaN Infinity", "docker build -t xrplb-app .",
-    'WHERE angkatan = "2025/2026"', "INSERT INTO kegiatan VALUES", 'JOIN taruna ON kelas = "X-B"',
+    "01001000 01100101 01111001",'pkg install radit-jomok', "0xFF 0b1010 NaN Infinity", "docker build -t rplb-app .",
+    'WHERE angkatan = "2025/2026"', "INSERT INTO kegiatan VALUES", 'JOIN taruna ON kelas = "RPL B"',
     "padding: 16px 24px;", "color: var(--accent);", "animation: fadeIn 0.8s ease;",
   ];
   let drops = [];
@@ -86,40 +86,40 @@
 
       const memberPhotos = [
         "oby.jpeg",           // 01 - Adi hidayat
-        "ahmad.jpeg",            // 02 - Ahmad rifki
+        "ahmad.jpg",            // 02 - Ahmad rifki
         "arum.jpeg",      // 03 - ajeng putri arumi
         "amanda.jpeg",     // 04 - amanda sifa widodo
         "",                // 05 - aris meylina putri
         "azzkia.jpeg",    // 06 - azzkia farhatunnisa
         "bilqis.jpeg",       // 07 - bilqis hanifatul halimah
-        "",                // 08 - cerdas abdul jabar
-        "",                // 09 - dandy fahri
+        "cerdas.jpg",                // 08 - cerdas abdul jabar
+        "Holik.jpg",                // 09 - dandy fahri
         "dehan.jpeg",          // 10 - dehan fadilah
-        "desta.jpeg",         // 11 - desta ginanjar
+        "Desta.jpg",         // 11 - desta ginanjar
         "dila.jpeg",          // 12 - dila fitriani
         "eva.jpeg",             // 13 - eva rahayu
-        "",                // 14 - Farhan arya zaelani
+        "Farhan.jpg",                // 14 - Farhan arya zaelani
         "entod.jpeg",     // 15 - febriyana maulidan solihin
-        "jespy.jpeg",    // 16 - jaspy gema ramadhan
+        "Jaspy.jpg",    // 16 - jaspy gema ramadhan
         "",                // 17 - karina mulyasari
         "lala.jpeg",       // 18 - latifah ulumiyah
-        "dava.jpeg",         // 19 - muhammad daffa al muhtar
+        "Dapa.jpg",         // 19 - muhammad daffa al muhtar
         "nadya.jpeg",        // 20 - nadya salsabila
-        "noval.jpeg",    // 21 - naufal aydin nashif
+        "Nopal.jpg",    // 21 - naufal aydin nashif
         "najwa o.jpeg",          // 22 - nazwa ocktara aryanti
         "",                // 23 - nazwa olivia
         "nesya.jpeg",      // 24 - neisya khotimatul zahra
         "",                // 25 - Nurhadi Abdul Mughni
-        "",                // 26 - pielly ghaffar arrauf rajab
-        "radit.jpeg",     // 27 - raditya al-ghifari
-        "",                // 28 - Rahman Adli Permana
+        "Piely.jpg",                // 26 - pielly ghaffar arrauf rajab
+        "Radit.jpg",     // 27 - raditya al-ghifari
+        "Abah.jpg",                // 28 - Rahman Adli Permana
         "rahma.jpeg",             // 29 - Rahmayanti
-        "reyga.jpeg",  // 30 - reyga dwie oktaviyana
+        "Gangster 2.jpg",  // 30 - reyga dwie oktaviyana
         "sela.jpeg",                  // 31 - sella
         "",                // 32 - sesilia saroi marei
         "",                // 33 - tio permana
         "",                // 34 - widia ramadhani
-        "",                // 35 - wiliandri
+        "Willy.jpg",                // 35 - wiliandri
         "windi.jpeg",               // 36 - windiani
         "photos/oya-grance.jpg",             // 37 - oya grance mambrisauw
         "zaskia.jpeg",            // 38 - zaskia aira uswatun hasanah
@@ -210,6 +210,35 @@
         ["1.jpeg", "Poto Taruna"],
         ["2.jpeg", "TARUNA"],
         ["r.jpeg", "Futsal di Carera"],
+        ["17AN.jpg", "17 Agustus 2026"],
+        ["17AUGUST.jpg", "17 Agustus 2026"],
+        ["BATIKDAY1.jpg", "Batik Day"],
+        ["BATIKDAY2.jpg", "Batik Day"],
+        ["BATIKDAY3.jpg", "Batik Day"],
+        ["BATIKDAY4.jpg", "Batik Day"],
+        ["BATIKDAY5.jpg", "Batik Day"],
+        ["BATIKDAY6.jpg", "Batik Day"],
+        ["BATIKDAY7.jpg", "Batik Day"],
+        ["BBOYS.jpg", "Boys Day"],
+        ["CIHEULEUT1.jpg", "Poto di Ciheuleut"],
+        ["CIHEULEUT2.jpg", "Poto di Ciheuleut"],
+        ["JAKI1.jpg", "Poto di Jaki"],
+        ["JAKI2.jpg", "Poto di Jaki"],
+        ["JENGUKAHMAD.jpg", "Jenguk Ahmad"],
+        ["KKRI1.jpg", "KKRI"],
+        ["KKRI2.jpg", "KKRI"],
+        ["MAKBER.jpg", "MAKAN BERSAMA"],
+        ["MBG.jpg", "MBG TIME"],
+        ["NESAS1.jpg", "Poto di Nesas"],
+        ["NESAS2.jpg", "Poto di Nesas"],
+        ["NESAS3.jpg", "Poto di Nesas"],
+        ["NESAS4.jpg", "Poto di Nesas"],
+        ["NESAS5.jpg", "Poto di Nesas"],
+        ["NESAS6.jpg", "Poto di Nesas"],
+        ["RPLBOYS.jpg", "RPL BOYS"],
+        ["SLEEP1.jpg", "SLEEPING TIME"],
+        ["TANGGA1.jpg", "Poto di Tangga"],
+        ["TANGGA2.jpg", "Poto di Tangga"],
       ].map((x) => ({ img: `${ASSET_PATHS.images}${x[0]}`, title: x[1] }));
 
       const activities = [
