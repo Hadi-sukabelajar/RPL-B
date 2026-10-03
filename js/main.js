@@ -103,7 +103,7 @@
         "Jaspy.jpg",    // 16 - jaspy gema ramadhan
         "",                // 17 - karina mulyasari
         "lala.jpeg",       // 18 - latifah ulumiyah
-        "dapa.jpg",         // 19 - muhammad daffa al muhtar
+        "muhtar.jpg",         // 19 - muhammad daffa al muhtar
         "nadya.jpeg",        // 20 - nadya salsabila
         "nopal.jpg",    // 21 - naufal aydin nashif
         "najwa o.jpeg",          // 22 - nazwa ocktara aryanti
