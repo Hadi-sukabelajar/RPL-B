@@ -105,7 +105,7 @@
         "lala.jpeg",       // 18 - latifah ulumiyah
         "dapa.jpg",         // 19 - muhammad daffa al muhtar
         "nadya.jpeg",        // 20 - nadya salsabila
-        "Nopal.jpg",    // 21 - naufal aydin nashif
+        "nopal.jpg",    // 21 - naufal aydin nashif
         "najwa o.jpeg",          // 22 - nazwa ocktara aryanti
         "",                // 23 - nazwa olivia
         "nesya.jpeg",      // 24 - neisya khotimatul zahra
@@ -117,7 +117,7 @@
         "Gangster 2.jpg",  // 30 - reyga dwie oktaviyana
         "sela.jpeg",                  // 31 - sella
         "",                // 32 - sesilia saroi marei
-        "",                // 33 - tio permana
+        "tio.jpg",                // 33 - tio permana
         "",                // 34 - widia ramadhani
         "Willy .jpg",                // 35 - wiliandri
         "windi.jpeg",               // 36 - windiani
