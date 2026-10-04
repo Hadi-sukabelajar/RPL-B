@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <title>RPL B - SMKN 2 Subang</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap"
       rel="stylesheet"
@@ -19,123 +20,118 @@
     </button>
     <div class="toast" id="toast">Siap!</div>
 
-    <div id="music-player">
+    <div id="music-player" class="collapsed">
+      <!-- Mini Pill Player saat di-minimize -->
       <button
         class="mp-collapsed-btn"
         type="button"
         onclick="expandPlayer()"
-        title="Buka music player"
+        title="Buka pemutar musik"
       >
-        &#127925;
+        <span class="mp-mini-icon">&#127925;</span>
+        <span class="mp-mini-info">
+          <span class="mp-mini-title" id="mpMiniTitle">Playlist RPL B</span>
+          <span class="mp-mini-artist" id="mpMiniArtist">Klik untuk buka</span>
+        </span>
+        <span
+          class="mp-mini-play-btn"
+          id="mpMiniPlayBtn"
+          onclick="event.stopPropagation(); mpTogglePlay()"
+          title="Play/Pause"
+        >&#9654;</span>
       </button>
-      <div class="mp-header" onclick="collapsePlayer()">
-        <div class="mp-header-left">
-          <div class="mp-icon-dot" id="mpDot"></div>
-          <span class="mp-label">Rpl-B PlayList</span>
-        </div>
-        <button class="mp-collapse-btn" type="button" title="Minimize">
-          &#8722;
-        </button>
-      </div>
-      <div class="mp-body">
-        <div class="mp-viz paused" id="mpViz">
-          <div class="mp-viz-bar"></div>
-          <div class="mp-viz-bar"></div>
-          <div class="mp-viz-bar"></div>
-          <div class="mp-viz-bar"></div>
-          <div class="mp-viz-bar"></div>
-          <div class="mp-viz-bar"></div>
-          <div class="mp-viz-bar"></div>
-          <div class="mp-viz-bar"></div>
-        </div>
-        <div class="mp-track-info">
-          <div class="mp-track-name" id="mpTrackName">Memuat playlist...</div>
-          <div class="mp-track-artist" id="mpTrackArtist">RPL B</div>
-          <div class="mp-track-num" id="mpTrackNum">- / -</div>
-        </div>
-        <div class="mp-progress-wrap">
-          <div
-            class="mp-progress-bar"
-            id="mpProgressBar"
-            onclick="mpSeek(event)"
-          >
-            <div class="mp-progress-fill" id="mpProgressFill"></div>
+
+      <!-- Player Sederhana saat dibuka -->
+      <div class="mp-panel">
+        <div class="mp-header" onclick="collapsePlayer()">
+          <div class="mp-header-left">
+            <div class="mp-wave" id="mpWave">
+              <span></span><span></span><span></span>
+            </div>
+            <span class="mp-label">Musik RPL B</span>
+            <span class="mp-track-num" id="mpTrackNum">1 / 30</span>
           </div>
-          <div class="mp-time-row">
-            <span id="mpCurrent">0:00</span>
-            <span id="mpDuration">0:00</span>
+          <button class="mp-collapse-btn" type="button" onclick="collapsePlayer()" title="Minimize">
+            &#8722;
+          </button>
+        </div>
+
+        <div class="mp-body">
+          <div class="mp-track-info">
+            <div class="mp-track-name" id="mpTrackName">Memuat playlist...</div>
+            <div class="mp-track-artist" id="mpTrackArtist">RPL B</div>
           </div>
-        </div>
-        <div class="mp-controls">
-          <button
-            class="mp-ctrl-btn sm"
-            id="mpLoopBtn"
-            type="button"
-            onclick="mpToggleLoop()"
-            title="Loop"
-          >
-            &#128257;
-          </button>
-          <button
-            class="mp-ctrl-btn md"
-            type="button"
-            onclick="mpPrev()"
-            title="Sebelumnya"
-          >
-            &#9198;
-          </button>
-          <button
-            class="mp-ctrl-btn lg"
-            id="mpPlayBtn"
-            type="button"
-            onclick="mpTogglePlay()"
-            title="Play/Pause"
-          >
-            &#9654;
-          </button>
-          <button
-            class="mp-ctrl-btn md"
-            type="button"
-            onclick="mpNext()"
-            title="Berikutnya"
-          >
-            &#9197;
-          </button>
-          <button
-            class="mp-ctrl-btn sm"
-            id="mpShuffleBtn"
-            type="button"
-            onclick="mpToggleShuffle()"
-            title="Acak"
-          >
-            &#128256;
-          </button>
-        </div>
-        <div class="mp-volume-row">
-          <span class="mp-vol-icon" id="mpVolIcon">&#128266;</span>
-          <input
-            class="mp-vol-slider"
-            id="mpVolSlider"
-            type="range"
-            min="0"
-            max="1"
-            step="0.02"
-            value="0.7"
-            oninput="mpSetVolume(this.value)"
-          />
-        </div>
-        <div class="mp-dots" id="mpDots"></div>
-        <div class="mp-upload-wrap">
-          <label class="mp-upload-label" for="mpFileInput"
-            >&#43; Tambah lagu ke playlist</label
-          >
-          <input
-            id="mpFileInput"
-            type="file"
-            accept="audio/*"
-            multiple
-            onchange="mpAddTracks(event)"
-          />
+
+          <div class="mp-progress-wrap">
+            <div class="mp-progress-bar" id="mpProgressBar" onclick="mpSeek(event)" title="Pilih menit">
+              <div class="mp-progress-fill" id="mpProgressFill"></div>
+            </div>
+            <div class="mp-time-row">
+              <span id="mpCurrent">0:00</span>
+              <span id="mpDuration">0:00</span>
+            </div>
+          </div>
+
+          <div class="mp-controls">
+            <button
+              class="mp-ctrl-btn sm"
+              id="mpShuffleBtn"
+              type="button"
+              onclick="mpToggleShuffle()"
+              title="Acak"
+            >
+              &#128256;
+            </button>
+            <button
+              class="mp-ctrl-btn md"
+              type="button"
+              onclick="mpPrev()"
+              title="Sebelumnya"
+            >
+              &#9198;
+            </button>
+            <button
+              class="mp-ctrl-btn lg"
+              id="mpPlayBtn"
+              type="button"
+              onclick="mpTogglePlay()"
+              title="Play/Pause"
+            >
+              &#9654;
+            </button>
+            <button
+              class="mp-ctrl-btn md"
+              type="button"
+              onclick="mpNext()"
+              title="Berikutnya"
+            >
+              &#9197;
+            </button>
+            <button
+              class="mp-ctrl-btn sm"
+              id="mpLoopBtn"
+              type="button"
+              onclick="mpToggleLoop()"
+              title="Ulangi"
+            >
+              &#128257;
+            </button>
+          </div>
+
+          <div class="mp-volume-row">
+            <span class="mp-vol-icon" id="mpVolIcon" onclick="mpToggleMute()" title="Volume">&#128266;</span>
+            <input
+              class="mp-vol-slider"
+              id="mpVolSlider"
+              type="range"
+              min="0"
+              max="1"
+              step="0.02"
+              value="0.7"
+              oninput="mpSetVolume(this.value)"
+              title="Atur volume"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -262,6 +258,8 @@
           <img
             src="assets/images/family-rplb.jpg"
             alt="Foto kelas RPL B SMKN 2 Subang"
+            loading="lazy"
+            decoding="async"
             onerror="this.style.display = 'none'"
           />
           <div class="about-corner">2025/2026</div>

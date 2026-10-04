@@ -22,6 +22,10 @@
     "padding: 16px 24px;", "color: var(--accent);", "animation: fadeIn 0.8s ease;","BY:RAHMAN DAN NURHADI",
   ];
   let drops = [];
+  let animId = null;
+  let lastTime = 0;
+  const targetFPS = 32;
+  const fpsInterval = 1000 / targetFPS;
 
   const randomItem = (items) => items[Math.floor(Math.random() * items.length)];
 
@@ -31,7 +35,7 @@
       y: Math.random() * -window.innerHeight,
       speed: 0.45 + Math.random() * 0.9,
       text: randomItem(snippets),
-      size: 10 + Math.floor(Math.random() * 5),
+      size: 11 + Math.floor(Math.random() * 4),
       color: randomItem(colors),
       opacity: 0.55 + Math.random() * 0.4,
       interval: 80 + Math.floor(Math.random() * 120),
@@ -40,34 +44,48 @@
   }
 
   function resize() {
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = Math.ceil(window.innerWidth * pixelRatio);
-    canvas.height = Math.ceil(window.innerHeight * pixelRatio);
-    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-    drops = Array.from({ length: Math.max(10, Math.floor(window.innerWidth / 90)) }, createDrop);
+    canvas.width = Math.ceil(window.innerWidth);
+    canvas.height = Math.ceil(window.innerHeight);
+    drops = Array.from({ length: Math.min(22, Math.max(8, Math.floor(window.innerWidth / 110))) }, createDrop);
   }
 
-  function draw() {
+  function draw(time) {
+    if (document.hidden) {
+      animId = null;
+      return;
+    }
+    animId = requestAnimationFrame(draw);
+
+    const delta = time - lastTime;
+    if (delta < fpsInterval) return;
+    lastTime = time - (delta % fpsInterval);
+
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    drops.forEach((drop) => {
-      ctx.save();
+    const dropCount = drops.length;
+    for (let i = 0; i < dropCount; i++) {
+      const drop = drops[i];
       ctx.globalAlpha = drop.opacity;
       ctx.fillStyle = drop.color;
       ctx.font = `${drop.size}px Consolas, 'Courier New', monospace`;
       ctx.fillText(drop.text, drop.x, drop.y);
-      ctx.restore();
 
       drop.y += drop.speed;
       drop.tick += 1;
       if (drop.tick >= drop.interval) { drop.tick = 0; drop.text = randomItem(snippets); }
       if (drop.y > window.innerHeight + 30) Object.assign(drop, createDrop(), { y: -30 });
-    });
-    requestAnimationFrame(draw);
+    }
   }
 
   resize();
-  window.addEventListener("resize", resize);
-  draw();
+  window.addEventListener("resize", resize, { passive: true });
+  animId = requestAnimationFrame(draw);
+
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && !animId) {
+      lastTime = performance.now();
+      animId = requestAnimationFrame(draw);
+    }
+  });
 })();
 
 
@@ -325,7 +343,9 @@
       const EMAILJS_SERVICE_ID = "service_ijr5hrj";
       const EMAILJS_TEMPLATE_ID = "template_5w6luyj";
       const mpAudio = new Audio();
+      mpAudio.preload = "none";
       mpAudio.volume = 0.7;
+      let mpPrevVolume = 0.7;
       let mpCurrentTrack = 0;
       let mpIsPlaying = false;
       let mpIsLooping = false;
@@ -372,7 +392,7 @@
       function avatarHTML(m) {
         if (m.photo) {
           return `<div class="member-avatar" style="background:${m.color}1f;color:${m.color};overflow:hidden;padding:0">
-            <img src="${m.photo}" alt="${m.name}" draggable="false"
+            <img src="${m.photo}" alt="${m.name}" draggable="false" loading="lazy" decoding="async"
               oncontextmenu="return false"
               style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;pointer-events:none;user-select:none;-webkit-touch-callout:none"
               onerror="this.parentElement.style.padding='';this.remove();this.parentElement.textContent='${m.initial}'">
@@ -446,7 +466,7 @@
         $("galleryGrid").innerHTML = galleryItems.map((item) => `
           <div class="coverflow-slide">
             <div class="gallery-card">
-              <img src="${item.img}" alt="${item.title}" draggable="false" onerror="this.style.display='none'">
+              <img src="${item.img}" alt="${item.title}" draggable="false" loading="lazy" decoding="async" onerror="this.style.display='none'">
               <div class="gallery-overlay"><div class="gallery-label">// ${item.title}</div></div>
             </div>
           </div>
@@ -595,21 +615,27 @@
       }
 
       function mpUpdateDots() {
+        const el = $("mpDots");
+        if (!el) return;
         const show = Math.min(playlist.length, 15);
-        $("mpDots").innerHTML = playlist.slice(0, show).map((_, i) =>
+        el.innerHTML = playlist.slice(0, show).map((_, i) =>
           `<button class="mp-dot${i === mpCurrentTrack ? " active" : ""}" type="button" onclick="mpLoadTrack(${i}, true)" title="${playlist[i].title || "Track"}"></button>`
         ).join("") + (playlist.length > show ? `<span style="color:var(--text3);font-size:.68rem">+${playlist.length - show}</span>` : "");
       }
 
       function mpUpdateUI() {
         const track = playlist[mpCurrentTrack] || { title: "Playlist", artist: "RPL B" };
-        $("mpTrackName").textContent = track.title;
-        $("mpTrackArtist").textContent = track.artist;
-        $("mpTrackNum").textContent = `${mpCurrentTrack + 1} / ${playlist.length}`;
-        $("musicBtn").innerHTML = mpIsPlaying ? "&#9208;" : "&#127925;";
-        $("mpPlayBtn").innerHTML = mpIsPlaying ? "&#9208;" : "&#9654;";
-        $("mpViz").classList.toggle("paused", !mpIsPlaying);
-        $("mpDot").style.animationPlayState = mpIsPlaying ? "running" : "paused";
+        if ($("mpTrackName")) $("mpTrackName").textContent = track.title;
+        if ($("mpTrackArtist")) $("mpTrackArtist").textContent = track.artist;
+        if ($("mpMiniTitle")) $("mpMiniTitle").textContent = track.title;
+        if ($("mpMiniArtist")) $("mpMiniArtist").textContent = track.artist;
+        if ($("mpTrackNum")) $("mpTrackNum").textContent = `${mpCurrentTrack + 1} / ${playlist.length}`;
+        if ($("musicBtn")) $("musicBtn").innerHTML = mpIsPlaying ? "&#9208;" : "&#127925;";
+        if ($("mpPlayBtn")) $("mpPlayBtn").innerHTML = mpIsPlaying ? "&#9208;" : "&#9654;";
+        if ($("mpMiniPlayBtn")) $("mpMiniPlayBtn").innerHTML = mpIsPlaying ? "&#9208;" : "&#9654;";
+        if ($("mpWave")) $("mpWave").classList.toggle("paused", !mpIsPlaying);
+        if ($("mpViz")) $("mpViz").classList.toggle("paused", !mpIsPlaying);
+        if ($("mpDot")) $("mpDot").style.animationPlayState = mpIsPlaying ? "running" : "paused";
         mpUpdateDots();
       }
 
@@ -641,7 +667,24 @@
 
       function mpToggleLoop() { mpIsLooping = !mpIsLooping; mpAudio.loop = mpIsLooping; $("mpLoopBtn").classList.toggle("active", mpIsLooping); showToast(mpIsLooping ? "Loop aktif" : "Loop nonaktif"); }
       function mpToggleShuffle() { mpIsShuffling = !mpIsShuffling; $("mpShuffleBtn").classList.toggle("active", mpIsShuffling); showToast(mpIsShuffling ? "Acak aktif" : "Urutan normal"); }
-      function mpSetVolume(value) { mpAudio.volume = parseFloat(value); $("mpVolIcon").textContent = value > 0.5 ? "\u{1F50A}" : value > 0 ? "\u{1F509}" : "\u{1F507}"; }
+      
+      function mpSetVolume(value) {
+        mpAudio.volume = parseFloat(value);
+        if ($("mpVolIcon")) {
+          $("mpVolIcon").textContent = value > 0.5 ? "\u{1F50A}" : value > 0 ? "\u{1F509}" : "\u{1F507}";
+        }
+      }
+
+      function mpToggleMute() {
+        if (mpAudio.volume > 0) {
+          mpPrevVolume = mpAudio.volume;
+          mpSetVolume(0);
+          if ($("mpVolSlider")) $("mpVolSlider").value = 0;
+        } else {
+          mpSetVolume(mpPrevVolume || 0.7);
+          if ($("mpVolSlider")) $("mpVolSlider").value = mpPrevVolume || 0.7;
+        }
+      }
 
       function mpSeek(event) {
         if (!mpAudio.duration) return;
@@ -746,12 +789,23 @@
         });
       }
 
-      addEventListener("scroll", () => {
+      let isScrollTicking = false;
+      function handleScroll() {
         const max = document.body.offsetHeight - innerHeight;
         $("progressBar").style.width = (max ? (scrollY / max) * 100 : 0) + "%";
         $("backTop").classList.toggle("visible", scrollY > 300);
         updateActiveNav();
-      });
+      }
+
+      addEventListener("scroll", () => {
+        if (!isScrollTicking) {
+          requestAnimationFrame(() => {
+            handleScroll();
+            isScrollTicking = false;
+          });
+          isScrollTicking = true;
+        }
+      }, { passive: true });
 
       addEventListener("keydown", (event) => {
         if (event.key === "Escape") { closeModal(); closeLightbox(); }
