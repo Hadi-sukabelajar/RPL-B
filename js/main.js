@@ -149,7 +149,7 @@
         "cerdas.jpg",                // 08 - cerdas abdul jabar
         "Holik.jpg",                // 09 - dandy fahri
         "dehan.jpeg",          // 10 - dehan fadilah
-        "Desta.jpg",         // 11 - desta ginanjar
+        "desta.jpeg",         // 11 - desta ginanjar
         "dila.jpeg",          // 12 - dila fitriani
         "eva.jpeg",             // 13 - eva rahayu
         "farhan.jpg",                // 14 - Farhan arya zaelani
@@ -157,7 +157,7 @@
         "Jaspy.jpg",    // 16 - jaspy gema ramadhan
         "",                // 17 - karina mulyasari
         "lala.jpeg",       // 18 - latifah ulumiyah
-        "muhtar.jpg",         // 19 - muhammad daffa al muhtar
+        "dapa.jpg",         // 19 - muhammad daffa al muhtar
         "nadya.jpeg",        // 20 - nadya salsabila
         "nopal.jpg",    // 21 - naufal aydin nashif
         "najwa o.jpeg",          // 22 - nazwa ocktara aryanti
