@@ -157,7 +157,7 @@
         "",                // 34 - widia ramadhani
         "Willy .jpg",                // 35 - wiliandri
         "windi.jpeg",               // 36 - windiani
-        "photos/oya-grance.jpg",             // 37 - oya grance mambrisauw
+        "",             // 37 - oya grance mambrisauw
         "zaskia.jpeg",            // 38 - zaskia aira uswatun hasanah
       ];
       // ============================================================
@@ -302,23 +302,23 @@
         { file: "viva-lavida.mp3", title: "Viva La Vida", artist: "Coldplay" },
         { file: "television-sofarsogood.mp3", title: "Television Sofar so good", artist: "Rex Orange County" },
         { file: "kenbali-pulang.mp3", title: "Kembali Pulang", artist: "Kangen Band" },
-        { file: "rumah-ke-rumah.mp3", title: "Rumah ke Rumah", artist: "Hindia" },
         { file: "best-friend.mp3", title: "Best Friend", artist: "Rex Orange County" },
+        { file: "kita.mp3", title: "Kita", artist: "Sheila On 7" },
+        { file: "hari-bersamanya.mp3", title: "Hari Bersamanya", artist: "Sheila On 7" },
+        { file: "ingatlah-hari-ini.mp3", title: "Ingatlah Hari Ini", artist: "Sheila On 7" },
+        { file: "kemesraan.mp3", title: "Kemesraan", artist: "Iwan Fals" },
+        { file: "kenangan-terindah.mp3", title: "Kenangan Terindah", artist: "Samsons" },
+        { file: "kita-slamanya.mp3", title: "Kita Selamanya", artist: "Sheila On 7" },
+        { file: "sampai-jumpa.mp3", title: "Sampai Jumpa", artist: "Endank Soekamti" },
+        { file: "teman-sejati.mp3", title: "Teman Sejati", artist: "Sheila On 7" },
         { file: "count-on-me.mp3", title: "Count on Me", artist: "Bruno Mars" },
         { file: "jendela-kelas.mp3", title: "Jendela Kelas 1", artist: "Iwan Fals" },
-        { file: "kita-usahakan-rumah-itu.mp3", title: "Kita Usahakan Rumah Itu", artist: "Sal Priadi" },
-        { file: "kasih-putih.mp3", title: "Kasih Putih", artist: "Glenn Fredly" },
         { file: "home.mp3", title: "Take Me Home", artist: "John Denver" },
         { file: "sahabat-sejati.mp3", title: "Sahabat Sejati", artist: "Sheila On 7" },
-        { file: "kita.mp3", title: "Kita", artist: "Sheila On 7" },
         { file: "33x.mp3", title: "33x", artist: "Perunggu" },
-        { file: "L.mp3", title: "L", artist: "HAL" },
         { file: "sesi-potret.mp3", title: "Sesi potret", artist: "enau" },
         { file: "titik-titik.mp3", title: "Ada Titik Titik di Ujung Doa", artist: "Sal Priadi" },
-        { file: "sky.mp3", title: "Skyfall", artist: "Adele" },
-        { file: "sofia.mp3", title: "Sofia", artist: "Clairo" },
         { file: "masa-kini.mp3", title: "Masa kini", artist: "Nuca" },
-        { file: "jiwa-yang-bersedih.mp3", title: "Jiwa Yang bersedih", artist: "ghea indrawari" },
       ].map((track) => ({ ...track, file: `${ASSET_PATHS.audio}${track.file}` }));
 
       const EMAILJS_PUBLIC_KEY = "TFJRSpdswZBMvQ9Iv";
