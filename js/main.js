@@ -19,7 +19,7 @@
     "schema.validate(formData)", "try { await connectDB() }", "catch (err) { console.error }",'SABISA BISA PASTI BISA KUDU BISA LUAR BIASA MABOK CODING', "const [count, setCount] = useState(0)", "return <div>{count}</div>", "npm install --save react-router-dom",
     "01001000 01100101 01111001",'pkg install radit-jomok', "0xFF 0b1010 NaN Infinity", "docker build -t rplb-app .",
     'WHERE angkatan = "2025/2026"', "INSERT INTO kegiatan VALUES", 'JOIN taruna ON kelas = "RPL B"',
-    "padding: 16px 24px;", "color: var(--accent);", "animation: fadeIn 0.8s ease;",
+    "padding: 16px 24px;", "color: var(--accent);", "animation: fadeIn 0.8s ease;","BY:RAHMAN DAN NURHADI",
   ];
   let drops = [];
 
@@ -74,6 +74,42 @@
       const $ = (id) => document.getElementById(id);
 
       // ============================================================
+      // PROTEKSI FOTO
+      // - Semua foto (profil, galeri, lightbox): TIDAK bisa di-drag.
+      // - Foto PROFIL (kartu anggota & modal): juga TIDAK bisa di-save
+      //   (klik kanan / tahan-lama diblokir).
+      // - Foto GALERI: klik kanan tetap aktif, jadi bisa di-download.
+      // ============================================================
+      (function protectPhotos() {
+        const style = document.createElement("style");
+        style.textContent = `
+          img {
+            -webkit-user-drag: none;
+            user-select: none;
+            -webkit-user-select: none;
+          }
+          .member-avatar img,
+          #modalAvatar img {
+            pointer-events: none;
+            -webkit-touch-callout: none;
+          }
+        `;
+        document.head.appendChild(style);
+
+        // Cegah drag untuk semua gambar
+        document.addEventListener("dragstart", (e) => {
+          if (e.target && e.target.tagName === "IMG") e.preventDefault();
+        });
+
+        // Blokir klik kanan / tahan-lama HANYA di foto profil
+        document.addEventListener("contextmenu", (e) => {
+          if (e.target && e.target.closest && e.target.closest(".member-avatar, #modalAvatar")) {
+            e.preventDefault();
+          }
+        });
+      })();
+
+      // ============================================================
       // FOTO PROFIL TARUNA/I
       // Isi nama file foto di bawah ini sesuai urutan absen.
       // Semua gambar disimpan di folder assets/images.
@@ -89,7 +125,7 @@
         "ahmad.jpg",            // 02 - Ahmad rifki
         "arum.jpeg",      // 03 - ajeng putri arumi
         "amanda.jpeg",     // 04 - amanda sifa widodo
-        "",                // 05 - aris meylina putri
+        "aris.jpeg",                // 05 - aris meylina putri
         "azzkia.jpeg",    // 06 - azzkia farhatunnisa
         "bilqis.jpeg",       // 07 - bilqis hanifatul halimah
         "cerdas.jpg",                // 08 - cerdas abdul jabar
@@ -112,7 +148,7 @@
         "",                // 25 - Nurhadi Abdul Mughni
         "Piely.jpg",                // 26 - pielly ghaffar arrauf rajab
         "Radit.jpg",     // 27 - raditya al-ghifari
-        "Abah.jpg",                // 28 - Rahman Adli Permana
+        "Abah.jpeg",                // 28 - Rahman Adli Permana
         "rahma.jpeg",             // 29 - Rahmayanti
         "Gangster 2.jpg",  // 30 - reyga dwie oktaviyana
         "sela.jpeg",                  // 31 - sella
@@ -127,17 +163,17 @@
       // ============================================================
 
       const members = [
-        ["Adi hidayat","2526411","Anggota","Programming","Kode adalah seni","#65d7c8","AH"],
-        ["Ahmad rifki","2526412","Anggota","Badminton/futsal","Kerja keras tak pernah khianat","#8ea7ff","AR"],
+        ["Adi hidayat","2526411","Anggota","toring","Kode adalah seni","#65d7c8","AH"],
+        ["Ahmad rifki","2526412","Anggota","futsal","Kerja keras tak pernah khianat","#8ea7ff","AR"],
         ["ajeng putri arumi","2526413","Anggota","Menulis","Catat setiap momen","#ffc56f","AP"],
         ["amanda sifa widodo","2526414","Anggota","Memasak","Hemat pangkal kaya","#ff7f73","AS"],
-        ["aris meylina putri","2526415","Anggota","Desain Grafis","Kreativitas tanpa batas","#65d7c8","AM"],
+        ["aris meylina putri","2526415","Anggota","nonton drakor/dracin","Kreativitas tanpa batas","#65d7c8","AM"],
         ["azzkia farhatunnisa","2526416","Anggota","Fotografi","Setiap frame ada cerita","#ffc56f","AF"],
         ["bilqis hanifatul halimah","2526417","Anggota","Music","Hidup itu seperti musik","#8ea7ff","BH"],
         ["cerdas abdul jabar","2526418","Ketua Kelas","Web Dev","HTML adalah seni","#ffc56f","CA"],
         ["dandy fahri","2526419","Anggota","Robotika","Inovasi tiada henti","#65d7c8","DF"],
         ["dehan fadilah","2526420","Anggota","UI/UX","Desain yang berbicara","#ff7f73","DF"],
-        ["desta ginanjar","2526421","Anggota","Backend Dev","Server tak pernah tidur","#8ea7ff","DG"],
+        ["desta ginanjar","2526421","Anggota","futsal","Server tak pernah tidur","#8ea7ff","DG"],
         ["dila fitriani","2526422","Anggota","Data Science","Data adalah emas","#65d7c8","DF"],
         ["eva rahayu","2526423","Anggota","Mobile Dev","Satu app untuk semua","#8ea7ff","ER"],
         ["Farhan arya zaelani","2526424","Anggota","Animasi","No JB No LIFE","#ffc56f","FA"],
@@ -147,11 +183,11 @@
         ["latifah ulumiyah","2526428","Anggota","AI/ML","Masa depan adalah AI","#ff7f73","LU"],
         ["muhammad daffa al muhtar","2526429","Anggota","gaming","Tetaplah hidup untuk hidup","#8ea7ff","MD"],
         ["nadya salsabila","2526430","Sekertaris","Networking","Koneksi adalah kunci","#65d7c8","NS"],
-        ["naufal aydin nashif","2526431","Anggota","Desain Logo","Logo adalah identitas","#8ea7ff","NA"],
+        ["naufal aydin nashif","2526431","Anggota","Tukang inul computer","Logo adalah identitas","#8ea7ff","NA"],
         ["nazwa ocktara aryanti","2526432","Anggota","DevOps","Deploy setiap hari","#ffc56f","NO"],
         ["nazwa olivia","2526433","Anggota","Content Creator","Konten adalah raja","#65d7c8","NO"],
         ["neisya khotimatul zahra","2526434","Anggota","3D Modeling","Dimensi ketiga adalah duniaku","#8ea7ff","NK"],
-        ["Nurhadi Abdul Mughni","2526435","Anggota","watch movies","I did it for me. I liked it. I was good at it.","#ffc56f","NAM"],
+        ["Nurhadi Abdul Mughni","2526435","Anggota","Abang programer web","I did it for me. I liked it. I was good at it.","#ffc56f","NAM"],
         ["pielly ghaffar arrauf rajab","2526436","Wakil Ketua","iot","Dimesi ketiga adalah duniaku","#ff7f73","PG"],
         ["raditya al-ghifari","2526437","Anggota","Design Digital art","Solve every problem","#8ea7ff","RA"],
         ["Rahman Adli Permana","2526438","Anggota","ceo pt kangkun sejahtera","No risk No perari","#65d7c8","RA"],
@@ -199,7 +235,7 @@
         ["latdastar (7).jpg", "Poto LATDASTAR"],
         ["latdastar (8).jpg", "Poto LATDASTAR"],
         ["latdastar (10).jpg", "Poto LATDASTAR"],
-        ["b.jpeg", "Poto LATDASTAR"],
+        ["latdastar (11).jpeg", "Poto LATDASTAR"],
         ["latdastar.jpeg", "Kompi Tanggo"],
         ["pin.jpeg", "Pemberian penghargaan Pin"],
         ["pelantikan.jpeg", "Pelantikan"],
@@ -210,6 +246,7 @@
         ["1.jpeg", "Poto Taruna"],
         ["2.jpeg", "TARUNA"],
         ["r.jpeg", "Futsal di Carera"],
+        ["futsal jeng t1.jpeg","futsal sama t1"],
         ["17AN.jpg", "17 Agustus 2026"],
         ["17AUGUST.jpg", "17 Agustus 2026"],
         ["BATIKDAY1.jpg", "Batik Day"],
@@ -227,6 +264,7 @@
         ["JENGUKAHMAD.jpg", "Jenguk Ahmad"],
         ["KKRI1.jpg", "KKRI"],
         ["KKRI2.jpg", "KKRI"],
+        ["pembuatan tugu kkri(1).jpeg","poto pas pembuatan tugu kkri"],
         ["MAKBER.jpg", "MAKAN BERSAMA"],
         ["MBG.jpg", "MBG TIME"],
         ["NESAS1.jpg", "Poto di Nesas"],
@@ -330,11 +368,13 @@
         return `translate(-50%,-50%) translateX(${x}px) translateY(${y}px) translateZ(${z}px) rotateY(${rotate}deg) scale(${scale})`;
       }
 
+      // Foto profil: tidak bisa di-drag & tidak bisa di-save
       function avatarHTML(m) {
         if (m.photo) {
           return `<div class="member-avatar" style="background:${m.color}1f;color:${m.color};overflow:hidden;padding:0">
-            <img src="${m.photo}" alt="${m.name}"
-              style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"
+            <img src="${m.photo}" alt="${m.name}" draggable="false"
+              oncontextmenu="return false"
+              style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;pointer-events:none;user-select:none;-webkit-touch-callout:none"
               onerror="this.parentElement.style.padding='';this.remove();this.parentElement.textContent='${m.initial}'">
           </div>`;
         }
@@ -401,11 +441,12 @@
         $("galleryCount").textContent = `${activeGallery + 1} / ${galleryItems.length}`;
       }
 
+      // Foto galeri: tidak bisa di-drag, klik kanan tetap aktif (bisa di-download)
       function renderGallery() {
         $("galleryGrid").innerHTML = galleryItems.map((item) => `
           <div class="coverflow-slide">
             <div class="gallery-card">
-              <img src="${item.img}" alt="${item.title}" onerror="this.style.display='none'">
+              <img src="${item.img}" alt="${item.title}" draggable="false" onerror="this.style.display='none'">
               <div class="gallery-overlay"><div class="gallery-label">// ${item.title}</div></div>
             </div>
           </div>
@@ -432,7 +473,7 @@
           <button class="lightbox-close" type="button" aria-label="Tutup">X</button>
           <button class="lightbox-nav prev" type="button" aria-label="Foto sebelumnya">&lt;</button>
           <figure class="lightbox-figure">
-            <img class="lightbox-img" alt="">
+            <img class="lightbox-img" alt="" draggable="false">
             <figcaption class="lightbox-caption">
               <span class="lightbox-title"></span>
               <span class="lightbox-count"></span>
@@ -509,8 +550,10 @@
         av.style.overflow = "hidden";
         av.style.padding = m.photo ? "0" : "";
         if (m.photo) {
-          av.innerHTML = `<img src="${m.photo}" alt="${m.name}"
-            style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"
+          // Foto profil di modal: tidak bisa di-drag & tidak bisa di-save
+          av.innerHTML = `<img src="${m.photo}" alt="${m.name}" draggable="false"
+            oncontextmenu="return false"
+            style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;pointer-events:none;user-select:none;-webkit-touch-callout:none"
             onerror="this.parentElement.style.padding='';this.parentElement.textContent='${m.initial}'">`;
         } else {
           av.textContent = m.initial;
