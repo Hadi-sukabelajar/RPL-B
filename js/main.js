@@ -564,7 +564,7 @@
           <div class="modal-info-item"><div class="modal-info-label">NIS</div><div>${m.nit}</div></div>
           <div class="modal-info-item"><div class="modal-info-label">No. Absen</div><div>#${String(m.no).padStart(2, "0")}</div></div>
           <div class="modal-info-item"><div class="modal-info-label">Hobi</div><div>${m.hobby}</div></div>
-          <div class="modal-info-item"><div class="modal-info-label">Kelas</div><div>X RPL B</div></div>
+          <div class="modal-info-item"><div class="modal-info-label">Kelas</div><div>RPL B</div></div>
           <div class="modal-info-item" style="grid-column:1/-1"><div class="modal-info-label">Motto</div><div style="color:var(--accent);font-style:italic">"${m.motto}"</div></div>
         `;
         $("modalOverlay").classList.add("open");
@@ -602,7 +602,7 @@
       }
 
       function mpUpdateUI() {
-        const track = playlist[mpCurrentTrack] || { title: "Playlist", artist: "X RPL B" };
+        const track = playlist[mpCurrentTrack] || { title: "Playlist", artist: "RPL B" };
         $("mpTrackName").textContent = track.title;
         $("mpTrackArtist").textContent = track.artist;
         $("mpTrackNum").textContent = `${mpCurrentTrack + 1} / ${playlist.length}`;
