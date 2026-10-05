@@ -250,7 +250,7 @@
         ["nazwa olivia","2526433","Anggota","Content Creator","Konten adalah raja","#65d7c8","NO"],
         ["neisya khotimatul zahra","2526434","Anggota","3D Modeling","Dimensi ketiga adalah duniaku","#8ea7ff","NK"],
         ["Nurhadi Abdul Mughni","2526435","Anggota","Abang programer web","I did it for me. I liked it. I was good at it.","#ffc56f","NAM"],
-        ["pielly ghaffar arrauf rajab","2526436","Wakil Ketua","iot","Dimesi ketiga adalah duniaku","#ff7f73","PG"],
+        ["pielly ghaffar arrauf rajab","2526436","Anggota","iot","Dimesi ketiga adalah duniaku","#ff7f73","PG"],
         ["raditya al-ghifari","2526437","Anggota","Design Digital art","Solve every problem","#8ea7ff","RA"],
         ["Rahman Adli Permana","2526438","Anggota","ceo pt kangkun sejahtera","No risk No perari","#65d7c8","RA"],
         ["Rahmayanti","2526439","Anggota","Cloud Computing","Langit bukan batas","#8ea7ff","RI"],
