@@ -139,7 +139,7 @@
       };
 
       const memberPhotos = [
-        "oby.jpg",           // 01 - Adi hidayat
+        "obyy.jpeg",           // 01 - Adi hidayat
         "ahmad.jpg",            // 02 - Ahmad rifki
         "arum.jpeg",      // 03 - ajeng putri arumi
         "amanda.jpeg",     // 04 - amanda sifa widodo
@@ -155,13 +155,13 @@
         "farhan.jpg",                // 14 - Farhan arya zaelani
         "entod.jpeg",     // 15 - febriyana maulidan solihin
         "Jaspy.jpg",    // 16 - jaspy gema ramadhan
-        "",                // 17 - karina mulyasari
+        "karina.png",                // 17 - karina mulyasari
         "lala.jpeg",       // 18 - latifah ulumiyah
         "dapa.jpg",         // 19 - muhammad daffa al muhtar
         "nadya.jpeg",        // 20 - nadya salsabila
         "nopal.jpeg",    // 21 - naufal aydin nashif
-        "",          // 22 - nazwa ocktara aryanti
-        "",                // 23 - nazwa olivia
+        "nazwa oktara.png",          // 22 - nazwa ocktara aryanti
+        "najwa olivia.png",                // 23 - nazwa olivia
         "nesya.jpeg",      // 24 - neisya khotimatul zahra
         "",                // 25 - Nurhadi Abdul Mughni
         "pili.jpeg",                // 26 - pielly ghaffar arrauf rajab
@@ -170,7 +170,7 @@
         "rahma.jpeg",             // 29 - Rahmayanti
         "Gangster 2.jpg",  // 30 - reyga dwie oktaviyana
         "sela.jpeg",                  // 31 - sella
-        "",                // 32 - sesilia saroi marei
+        "sesilia.png",                // 32 - sesilia saroi marei
         "tio.jpg",                // 33 - tio permana
         "",                // 34 - widia ramadhani
         "wili.jpeg",                // 35 - wiliandri
