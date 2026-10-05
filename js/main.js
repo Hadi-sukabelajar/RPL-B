@@ -180,6 +180,50 @@
       ];
       // ============================================================
 
+      // ============================================================
+      // DATA WALI KELAS
+      // Isi data wali kelas di bawah ini.
+      // Jika belum punya foto, biarkan photo kosong "" → pakai inisial.
+      // ============================================================
+      const waliKelas = {
+        name: "Iwan Permana, S.Kom",
+        nip: "12345678987654321",
+        subject: "Rekayasa Perangkat Lunak",
+        motto: "Mendidik dengan hati, membimbing dengan ilmu.",
+        photo: "",          // isi nama file foto, misal "walikelas.jpg"
+        initial: "IP",
+        color: "#65d7c8",
+      };
+      // ============================================================
+
+      function renderWaliKelas() {
+        const wk = waliKelas;
+        const photoPath = wk.photo ? `${ASSET_PATHS.images}${wk.photo}` : "";
+        const avatarEl = photoPath
+          ? `<div class="wk-avatar" style="overflow:hidden;padding:0">
+               <img src="${photoPath}" alt="${wk.name}" draggable="false" loading="lazy" decoding="async"
+                 oncontextmenu="return false"
+                 style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;pointer-events:none;user-select:none;-webkit-touch-callout:none"
+                 onerror="this.parentElement.style.padding='';this.remove();this.parentElement.textContent='${wk.initial}'">
+             </div>`
+          : `<div class="wk-avatar" style="background:${wk.color}1f;color:${wk.color}">${wk.initial}</div>`;
+
+        const el = document.getElementById("waliKelasCard");
+        if (!el) return;
+        el.innerHTML = `
+          <div class="wk-card">
+            <div class="wk-glow"></div>
+            <div class="wk-badge">&#128218; WALI KELAS</div>
+            ${avatarEl}
+            <div class="wk-name">${wk.name}</div>
+            <div class="wk-nip">NIP: ${wk.nip}</div>
+            <div class="wk-subject">${wk.subject}</div>
+            <div class="wk-motto">"${wk.motto}"</div>
+          </div>
+        `;
+      }
+      // ============================================================
+
       const members = [
         ["Adi hidayat","2526411","Anggota","toring","Kode adalah seni","#65d7c8","AH"],
         ["Ahmad rifki","2526412","Anggota","futsal","Kerja keras tak pernah khianat","#8ea7ff","AR"],
@@ -782,7 +826,7 @@
       }
 
       function updateActiveNav() {
-        const ids = ["home", "tentang", "anggota", "gallery", "kegiatan", "kontak"];
+        const ids = ["home", "tentang", "walikelas", "anggota", "gallery", "kegiatan", "kontak"];
         let current = "home";
         ids.forEach((id) => { const el = $(id); if (el && scrollY >= el.offsetTop - 120) current = id; });
         document.querySelectorAll(".nav-links a").forEach((link) => {
@@ -821,6 +865,7 @@
       });
 
       addEventListener("load", () => {
+        renderWaliKelas();
         renderMembers();
         renderGallery();
         renderTimeline();
