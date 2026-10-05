@@ -152,28 +152,28 @@
         "desta.jpeg",         // 11 - desta ginanjar
         "dila.jpeg",          // 12 - dila fitriani
         "eva.jpeg",             // 13 - eva rahayu
-        "farhan.jpg",                // 14 - Farhan arya zaelani
+        "farhan.jpeg",                // 14 - Farhan arya zaelani
         "entod.jpeg",     // 15 - febriyana maulidan solihin
         "Jaspy.jpg",    // 16 - jaspy gema ramadhan
         "",                // 17 - karina mulyasari
         "lala.jpeg",       // 18 - latifah ulumiyah
         "dapa.jpg",         // 19 - muhammad daffa al muhtar
         "nadya.jpeg",        // 20 - nadya salsabila
-        "nopal.jpg",    // 21 - naufal aydin nashif
+        "nopal.jpeg",    // 21 - naufal aydin nashif
         "najwa o.jpeg",          // 22 - nazwa ocktara aryanti
         "",                // 23 - nazwa olivia
         "nesya.jpeg",      // 24 - neisya khotimatul zahra
         "",                // 25 - Nurhadi Abdul Mughni
-        "Piely.jpg",                // 26 - pielly ghaffar arrauf rajab
+        "pili.jpeg",                // 26 - pielly ghaffar arrauf rajab
         "Radit.jpg",     // 27 - raditya al-ghifari
-        "Abah.jpeg",                // 28 - Rahman Adli Permana
+        "abah.jpeg",                // 28 - Rahman Adli Permana
         "rahma.jpeg",             // 29 - Rahmayanti
         "Gangster 2.jpg",  // 30 - reyga dwie oktaviyana
         "sela.jpeg",                  // 31 - sella
         "",                // 32 - sesilia saroi marei
         "tio.jpg",                // 33 - tio permana
         "",                // 34 - widia ramadhani
-        "Willy .jpg",                // 35 - wiliandri
+        "wili.jpeg",                // 35 - wiliandri
         "windi.jpeg",               // 36 - windiani
         "",             // 37 - oya grance mambrisauw
         "zaskia.jpeg",            // 38 - zaskia aira uswatun hasanah
