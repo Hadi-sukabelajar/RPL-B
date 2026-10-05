@@ -307,8 +307,9 @@
       ].map((x) => ({ date: x[0], title: x[1], desc: x[2], icon: x[3], color: x[4] }));
 
       const playlist = [
-        { file: "laskar-pelangi.mp3", title: "Laskar Pelangi", artist: "nidji" },
         { file: "kita-kesana.mp3", title: "Kita Kesana", artist: "Hindia" },
+        { file: "kaulahkamuku.mp3", title: "Kaulah Kamuku", artist: "" },
+        { file: "laskar-pelangi.mp3", title: "Laskar Pelangi", artist: "nidji" },
         { file: "melompat-lebih-tinggi.mp3", title: "Melompat Lebih Tinggi", artist: "sheila on 7" },
         { file: "rumah-kita.mp3", title: "Rumah Kita", artist: "God Bless" },
         { file: "sahabat-kecil.mp3", title: "Sahabat Kecil", artist: "Ipang" },
