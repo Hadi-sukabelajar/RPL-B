@@ -152,7 +152,7 @@
         "desta.jpeg",         // 11 - desta ginanjar
         "dila.jpeg",          // 12 - dila fitriani
         "eva.jpeg",             // 13 - eva rahayu
-        "farhan.jpeg",                // 14 - Farhan arya zaelani
+        "farhan.jpg",                // 14 - Farhan arya zaelani
         "entod.jpeg",     // 15 - febriyana maulidan solihin
         "Jaspy.jpg",    // 16 - jaspy gema ramadhan
         "",                // 17 - karina mulyasari
@@ -160,7 +160,7 @@
         "dapa.jpg",         // 19 - muhammad daffa al muhtar
         "nadya.jpeg",        // 20 - nadya salsabila
         "nopal.jpeg",    // 21 - naufal aydin nashif
-        "najwa o.jpeg",          // 22 - nazwa ocktara aryanti
+        "",          // 22 - nazwa ocktara aryanti
         "",                // 23 - nazwa olivia
         "nesya.jpeg",      // 24 - neisya khotimatul zahra
         "",                // 25 - Nurhadi Abdul Mughni
