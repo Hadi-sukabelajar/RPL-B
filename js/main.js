@@ -21,13 +21,13 @@
     "border-radius: 8px;", "display: flex; gap: 12px;", "background: linear-gradient(",
     "@media (max-width: 768px)", "def train_model(data):", 'print("Hello, World!")',"FARHAN KUCLUK",
     "for x in range(38):", "#include <iostream>",'create database RPLB', "int main() { return 0; }",'git init',
-    'cout << "RPL B" << endl;', "res.status(200).json(data)", 'fetch("/api/taruna")',
+    'cout << "RPL B" << endl;', "res.status(200).json(data)","I love you .- .-. .. ...",'fetch("/api/taruna")',
     ".then(res => res.json())",'sudo apt update && sudo apt upgrade', 'localStorage.setItem("kelas")', "position: absolute; z-index:",
     "transform: translateY(-3px)", "const router = express.Router()", "app.listen(3000, () => {",
     "schema.validate(formData)", "try { await connectDB() }", "catch (err) { console.error }",'SABISA BISA PASTI BISA KUDU BISA LUAR BIASA MABOK CODING', "const [count, setCount] = useState(0)", "return <div>{count}</div>", "npm install --save react-router-dom",
     "01001000 01100101 01111001",'pkg install radit-jomok', "0xFF 0b1010 NaN Infinity", "docker build -t rplb-app .",
     'WHERE angkatan = "2025/2026"', "INSERT INTO kegiatan VALUES", 'JOIN taruna ON kelas = "RPL B"',
-    "padding: 16px 24px;", "color: var(--accent);", "animation: fadeIn 0.8s ease;","BY:RAHMAN DAN NURHADI",
+    "padding: 16px 24px;", "color: var(--accent);", "animation: fadeIn 0.8s ease;","design by rahman dan nurhadi",
   ];
   let drops = [];
   let animId = null;
@@ -368,6 +368,10 @@ const galleryItems = [
   ["SLEEP1.jpg", "SLEEPING TIME"],
   ["TANGGA1.jpg", "Poto di Tangga"],
   ["TANGGA2.jpg", "Poto di Tangga"],
+  ["poto pas studio rpl 1.jpeg", "Poto pas pelantikan di studio rpl"],
+  ["poto pas studio rpl 2.jpeg", "Poto pas pelantikan di studio rpl"],
+  ["poto studio rpl 3.jpeg", "Poto pas pelantikan di studio rpl"],
+  ["poto pas studio rpl 4.jpeg", "Poto pas pelantikan di studio rpl"],
 ].map((x) => ({ img: `${ASSET_PATHS.images}${x[0]}`, title: x[1] }));
 
 const activities = [
