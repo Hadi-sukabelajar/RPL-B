@@ -93,6 +93,26 @@ textarea {
   font: inherit;
 }
 
+.skip-link {
+  position: fixed;
+  top: -80px;
+  left: 16px;
+  z-index: 200;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #06110f;
+  font-weight: 700;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus-visible {
+  top: 12px;
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
 nav {
   position: fixed;
   inset: 0 0 auto;
@@ -223,6 +243,7 @@ nav {
   border-bottom: 1px solid var(--border);
   background: rgba(7, 11, 13, 0.96);
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   transform: translateY(-14px);
   transition: 0.25s ease;
@@ -230,6 +251,7 @@ nav {
 
 .mobile-nav.open {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
 }
@@ -1928,11 +1950,15 @@ footer {
   height: 44px;
   border-radius: 50%;
   opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
   transform: translateY(14px);
 }
 
 .back-top.visible {
   opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
   transform: translateY(0);
 }
 

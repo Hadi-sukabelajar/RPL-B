@@ -5,6 +5,11 @@
   const canvas = document.getElementById("codeRain");
   if (!canvas) return;
 
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    canvas.style.display = "none";
+    return;
+  }
+
   const ctx = canvas.getContext("2d");
   const colors = ["#65d7c8", "#8ea7ff", "#ffc56f", "#ff7f73", "#a8eddb"];
   const snippets = [
@@ -12,9 +17,9 @@
     "for (let i = 0; i < 38; i++)", 'console.log("STEMPERT 2025");', "if (semangat === true) {",
     'document.querySelector(".kelas")', "async function deploy() {", "await launchProject();",
     "export default class RPLB {", "npm run build --production", 'git commit -m "ready 🚀"',
-    "SELECT * FROM taruna_rplb", 'import { useState } from "react"', '<div class="hero-section">',
+    "SELECT * FROM taruna_rplb","FARHAN BRENGSEK", 'import { useState } from "react"', '<div class="hero-section">',
     "border-radius: 8px;", "display: flex; gap: 12px;", "background: linear-gradient(",
-    "@media (max-width: 768px)", "def train_model(data):", 'print("Hello, World!")',
+    "@media (max-width: 768px)", "def train_model(data):", 'print("Hello, World!")',"FARHAN KUCLUK",
     "for x in range(38):", "#include <iostream>",'create database RPLB', "int main() { return 0; }",'git init',
     'cout << "RPL B" << endl;', "res.status(200).json(data)", 'fetch("/api/taruna")',
     ".then(res => res.json())",'sudo apt update && sudo apt upgrade', 'localStorage.setItem("kelas")', "position: absolute; z-index:",
@@ -97,6 +102,24 @@
 
 const $ = (id) => document.getElementById(id);
 
+const storage = {
+  get(key, fallback) {
+    try {
+      const value = localStorage.getItem(key);
+      return value === null ? fallback : value;
+    } catch (error) {
+      return fallback;
+    }
+  },
+  set(key, value) {
+    try {
+      localStorage.setItem(key, value);
+    } catch (error) {
+      /* localStorage bisa diblokir; abaikan */
+    }
+  },
+};
+
 // ============================================================
 // PROTEKSI FOTO
 // - Semua foto (profil, galeri, lightbox): TIDAK bisa di-drag.
@@ -161,22 +184,22 @@ const memberPhotos = [
   "farhan.jpg",                // 14 - Farhan arya zaelani
   "entod.jpeg",     // 15 - febriyana maulidan solihin
   "Jaspy.jpg",    // 16 - jaspy gema ramadhan
-  "karina.png",                // 17 - karina mulyasari
+  "karina.jpg",                // 17 - karina mulyasari
   "lala.jpeg",       // 18 - latifah ulumiyah
   "dapa.jpg",         // 19 - muhammad daffa al muhtar
   "nadya.jpeg",        // 20 - nadya salsabila
   "nopal.jpeg",    // 21 - naufal aydin nashif
-  "nazwa oktara.png",          // 22 - nazwa ocktara aryanti
-  "najwa olivia.png",                // 23 - nazwa olivia
+  "nazwa oktara.jpg",          // 22 - nazwa ocktara aryanti
+  "najwa olivia.jpg",                // 23 - nazwa olivia
   "nesya.jpeg",      // 24 - neisya khotimatul zahra
   "",                // 25 - Nurhadi Abdul Mughni
   "pili.jpeg",                // 26 - pielly ghaffar arrauf rajab
   "Radit.jpg",     // 27 - raditya al-ghifari
-  "abah.jpeg",                // 28 - Rahman Adli Permana
+  "Abah.jpeg",                // 28 - Rahman Adli Permana
   "rahma.jpeg",             // 29 - Rahmayanti
   "Gangster 2.jpg",  // 30 - reyga dwie oktaviyana
   "sela.jpeg",                  // 31 - sella
-  "sesilia.png",                // 32 - sesilia saroi marei
+  "sesilia.jpg",                // 32 - sesilia saroi marei
   "tio.jpg",                // 33 - tio permana
   "",                // 34 - widia ramadhani
   "wili.jpeg",                // 35 - wiliandri
@@ -193,7 +216,7 @@ const memberPhotos = [
 // ============================================================
 const waliKelas = {
   name: "Iwan Permana, S.Kom",
-  nip: "12345678987654321",
+  nip: "",
   subject: "Rekayasa Perangkat Lunak",
   motto: "Mendidik dengan hati, membimbing dengan ilmu.",
   photo: "",          // isi nama file foto, misal "walikelas.jpg"
@@ -222,7 +245,7 @@ function renderWaliKelas() {
       <div class="wk-badge">&#128218; WALI KELAS</div>
       ${avatarEl}
       <div class="wk-name">${wk.name}</div>
-      <div class="wk-nip">NIP: ${wk.nip}</div>
+      ${wk.nip ? `<div class="wk-nip">NIP: ${wk.nip}</div>` : ""}
       <div class="wk-subject">${wk.subject}</div>
       <div class="wk-motto">"${wk.motto}"</div>
     </div>
@@ -250,13 +273,13 @@ const members = [
   ["karina mulyasari","2526427","Anggota","Game Dev","Dunia virtual tanpa batas","#ffc56f","KM"],
   ["latifah ulumiyah","2526428","Anggota","AI/ML","Masa depan adalah AI","#ff7f73","LU"],
   ["muhammad daffa al muhtar","2526429","Anggota","gaming","Tetaplah hidup untuk hidup","#8ea7ff","MD"],
-  ["nadya salsabila","2526430","Sekertaris","Networking","Koneksi adalah kunci","#65d7c8","NS"],
+  ["nadya salsabila","2526430","Sekretaris","Networking","Koneksi adalah kunci","#65d7c8","NS"],
   ["naufal aydin nashif","2526431","Anggota","Tukang inul computer","Logo adalah identitas","#8ea7ff","NA"],
   ["nazwa ocktara aryanti","2526432","Anggota","DevOps","Deploy setiap hari","#ffc56f","NO"],
   ["nazwa olivia","2526433","Anggota","Content Creator","Konten adalah raja","#65d7c8","NO"],
   ["neisya khotimatul zahra","2526434","Anggota","3D Modeling","Dimensi ketiga adalah duniaku","#8ea7ff","NK"],
   ["Nurhadi Abdul Mughni","2526435","Anggota","Abang programer web","I did it for me. I liked it. I was good at it.","#ffc56f","NAM"],
-  ["pielly ghaffar arrauf rajab","2526436","Anggota","iot","Dimesi ketiga adalah duniaku","#ff7f73","PG"],
+  ["pielly ghaffar arrauf rajab","2526436","Anggota","iot","Dimensi ketiga adalah duniaku","#ff7f73","PG"],
   ["raditya al-ghifari","2526437","Anggota","Design Digital art","Solve every problem","#8ea7ff","RA"],
   ["Rahman Adli Permana","2526438","Anggota","ceo pt kangkun sejahtera","No risk No perari","#65d7c8","RA"],
   ["Rahmayanti","2526439","Anggota","Cloud Computing","Langit bukan batas","#8ea7ff","RI"],
@@ -397,10 +420,12 @@ const playlist = [
 const EMAILJS_PUBLIC_KEY = "TFJRSpdswZBMvQ9Iv";
 const EMAILJS_SERVICE_ID = "service_ijr5hrj";
 const EMAILJS_TEMPLATE_ID = "template_5w6luyj";
+const storedVolume = parseFloat(storage.get("rplb-volume", "0.7"));
+const initialVolume = Number.isFinite(storedVolume) ? Math.min(1, Math.max(0, storedVolume)) : 0.7;
 const mpAudio = new Audio();
 mpAudio.preload = "none";
-mpAudio.volume = 0.7;
-let mpPrevVolume = 0.7;
+mpAudio.volume = initialVolume;
+let mpPrevVolume = initialVolume || 0.7;
 let mpCurrentTrack = 0;
 let mpIsPlaying = false;
 let mpIsLooping = false;
@@ -417,11 +442,11 @@ let filteredMembers = [...members];
 // ============================================================
 
 function badgeClass(role) {
-  return ({ "Ketua Kelas": "badge-ketua", "Wakil Ketua": "badge-wakil", Sekertaris: "badge-sekretaris", Bendahara: "badge-bendahara", Anggota: "badge-anggota" }[role] || "badge-anggota");
+  return ({ "Ketua Kelas": "badge-ketua", "Wakil Ketua": "badge-wakil", Sekretaris: "badge-sekretaris", Bendahara: "badge-bendahara", Anggota: "badge-anggota" }[role] || "badge-anggota");
 }
 
 function roleShort(role) {
-  return ({ "Ketua Kelas": "KETUA", "Wakil Ketua": "WAKIL", Sekertaris: "SEKRE", Bendahara: "BDH", Anggota: "MBR" }[role] || "MBR");
+  return ({ "Ketua Kelas": "KETUA", "Wakil Ketua": "WAKIL", Sekretaris: "SEKRE", Bendahara: "BDH", Anggota: "MBR" }[role] || "MBR");
 }
 
 function shortOffset(i, a, total) {
@@ -597,12 +622,13 @@ function openLightbox(i) {
   updateLightbox();
   lightboxEl.classList.add("open");
   document.body.style.overflow = "hidden";
+  lightboxEl.querySelector(".lightbox-close").focus({ preventScroll: true });
 }
 
 function closeLightbox() {
   if (!lightboxEl) return;
   lightboxEl.classList.remove("open");
-  document.body.style.overflow = "";
+  if (!$("modalOverlay").classList.contains("open")) document.body.style.overflow = "";
 }
 
 function isLightboxOpen() { return !!lightboxEl && lightboxEl.classList.contains("open"); }
@@ -652,18 +678,21 @@ function openModal(index) {
   $("modalName").textContent = m.name;
   $("modalRole").innerHTML = `<span class="member-role-badge ${badgeClass(m.role)}" style="position:static;display:inline-block">${m.role}</span>`;
   $("modalInfo").innerHTML = `
-    <div class="modal-info-item"><div class="modal-info-label">NIS</div><div>${m.nit}</div></div>
+    <div class="modal-info-item"><div class="modal-info-label">NIT</div><div>${m.nit}</div></div>
     <div class="modal-info-item"><div class="modal-info-label">No. Absen</div><div>#${String(m.no).padStart(2, "0")}</div></div>
     <div class="modal-info-item"><div class="modal-info-label">Hobi</div><div>${m.hobby}</div></div>
     <div class="modal-info-item"><div class="modal-info-label">Kelas</div><div>RPL B</div></div>
     <div class="modal-info-item" style="grid-column:1/-1"><div class="modal-info-label">Motto</div><div style="color:var(--accent);font-style:italic">"${m.motto}"</div></div>
   `;
   $("modalOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+  if ($("modalCloseBtn")) $("modalCloseBtn").focus({ preventScroll: true });
 }
 
 function closeModal(event) {
   if (!event || event.target.id === "modalOverlay" || event.target.classList.contains("modal-close")) {
     $("modalOverlay").classList.remove("open");
+    if (!isLightboxOpen()) document.body.style.overflow = "";
   }
 }
 
@@ -736,20 +765,22 @@ function mpToggleLoop() { mpIsLooping = !mpIsLooping; mpAudio.loop = mpIsLooping
 function mpToggleShuffle() { mpIsShuffling = !mpIsShuffling; $("mpShuffleBtn").classList.toggle("active", mpIsShuffling); showToast(mpIsShuffling ? "Acak aktif" : "Urutan normal"); }
 
 function mpSetVolume(value) {
-  mpAudio.volume = parseFloat(value);
+  const volume = Math.min(1, Math.max(0, parseFloat(value) || 0));
+  mpAudio.volume = volume;
+  if (volume > 0) mpPrevVolume = volume;
   if ($("mpVolIcon")) {
-    $("mpVolIcon").textContent = value > 0.5 ? "\u{1F50A}" : value > 0 ? "\u{1F509}" : "\u{1F507}";
+    $("mpVolIcon").textContent = volume > 0.5 ? "\u{1F50A}" : volume > 0 ? "\u{1F509}" : "\u{1F507}";
   }
+  if ($("mpVolSlider")) $("mpVolSlider").value = volume;
+  storage.set("rplb-volume", volume);
 }
 
 function mpToggleMute() {
   if (mpAudio.volume > 0) {
     mpPrevVolume = mpAudio.volume;
     mpSetVolume(0);
-    if ($("mpVolSlider")) $("mpVolSlider").value = 0;
   } else {
     mpSetVolume(mpPrevVolume || 0.7);
-    if ($("mpVolSlider")) $("mpVolSlider").value = mpPrevVolume || 0.7;
   }
 }
 
@@ -812,15 +843,39 @@ function mpUnlockAutoplay() {
 // TEMA, NAVIGASI & TOAST
 // ============================================================
 
-function toggleTheme() {
-  const html = document.documentElement;
-  const dark = html.dataset.theme === "dark";
-  html.dataset.theme = dark ? "light" : "dark";
-  $("themeBtn").innerHTML = dark ? "&#9790;" : "&#9728;";
-  showToast(dark ? "Mode terang aktif" : "Mode gelap aktif");
+function applyTheme(theme, notify = false) {
+  const next = theme === "light" ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  if (themeColor) themeColor.setAttribute("content", next === "dark" ? "#070b0d" : "#f3f7f6");
+  if ($("themeBtn")) {
+    $("themeBtn").innerHTML = next === "dark" ? "&#9728;" : "&#9790;";
+    $("themeBtn").title = next === "dark" ? "Ganti ke mode terang" : "Ganti ke mode gelap";
+  }
+  if (notify) showToast(next === "dark" ? "Mode gelap aktif" : "Mode terang aktif");
 }
 
-function toggleMobileNav() { $("mobileNav").classList.toggle("open"); }
+function toggleTheme() {
+  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  applyTheme(next, true);
+  storage.set("rplb-theme", next);
+}
+
+function toggleMobileNav() {
+  const open = $("mobileNav").classList.toggle("open");
+  if ($("hamburgerBtn")) {
+    $("hamburgerBtn").setAttribute("aria-expanded", open ? "true" : "false");
+    $("hamburgerBtn").setAttribute("aria-label", open ? "Tutup menu navigasi" : "Buka menu navigasi");
+  }
+}
+
+function closeMobileNav() {
+  $("mobileNav").classList.remove("open");
+  if ($("hamburgerBtn")) {
+    $("hamburgerBtn").setAttribute("aria-expanded", "false");
+    $("hamburgerBtn").setAttribute("aria-label", "Buka menu navigasi");
+  }
+}
 
 function showToast(message) {
   $("toast").textContent = message;
@@ -836,6 +891,7 @@ function showToast(message) {
 function sendMsg() {
   const name = $("contactName").value.trim(), email = $("contactEmail").value.trim(), message = $("contactMessage").value.trim();
   if (!name || !email || !message) { showToast("Lengkapi nama, email, dan pesan dulu."); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast("Format email belum benar."); return; }
   if (!window.emailjs) { showToast("EmailJS belum kebuka. Cek koneksi internet."); return; }
   const btn = document.querySelector(".kontak-form .btn-primary");
   btn.disabled = true;
@@ -877,19 +933,42 @@ addEventListener("scroll", () => {
   }
 }, { passive: true });
 
+function activeCoverflowSection() {
+  const mid = innerHeight / 2;
+  const distanceToMid = (id) => {
+    const rect = $(id).getBoundingClientRect();
+    if (rect.top <= mid && rect.bottom >= mid) return 0;
+    return Math.min(Math.abs(rect.top - mid), Math.abs(rect.bottom - mid));
+  };
+  return distanceToMid("gallery") < distanceToMid("anggota") ? "gallery" : "anggota";
+}
+
 addEventListener("keydown", (event) => {
-  if (event.key === "Escape") { closeModal(); closeLightbox(); }
+  if (event.key === "Escape") {
+    if (isLightboxOpen()) closeLightbox();
+    else closeModal();
+    closeMobileNav();
+  }
   if (isLightboxOpen()) {
     if (event.key === "ArrowRight") lightboxStep(1);
     if (event.key === "ArrowLeft") lightboxStep(-1);
     return;
   }
-  if (document.activeElement.id === "searchInput") return;
-  if (event.key === "ArrowRight") { nextMember(); nextGallery(); }
-  if (event.key === "ArrowLeft") { prevMember(); prevGallery(); }
+  if ($("modalOverlay").classList.contains("open")) return;
+  const tag = document.activeElement.tagName;
+  if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+  const section = activeCoverflowSection();
+  if (event.key === "ArrowRight") { if (section === "gallery") nextGallery(); else nextMember(); }
+  if (event.key === "ArrowLeft") { if (section === "gallery") prevGallery(); else prevMember(); }
 });
 
+addEventListener("resize", () => {
+  if (innerWidth > 920) closeMobileNav();
+}, { passive: true });
+
 addEventListener("load", () => {
+  applyTheme(document.documentElement.dataset.theme || "dark");
+  mpSetVolume(mpAudio.volume);
   renderWaliKelas();
   renderMembers();
   renderGallery();

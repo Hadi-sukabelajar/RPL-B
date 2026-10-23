@@ -4,6 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <title>RPL B - SMKN 2 Subang</title>
+    <meta
+      name="description"
+      content="Website resmi kelas RPL B SMKN 2 Subang. Kenali 38 taruna/i, wali kelas, galeri kegiatan, dan perjalanan keluarga Rekayasa Perangkat Lunak B."
+    />
+    <meta name="theme-color" content="#070b0d" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="RPL B - SMKN 2 Subang" />
+    <meta
+      property="og:description"
+      content="Keluarga kecil yang solid: 38 taruna/i Rekayasa Perangkat Lunak B SMKN 2 Subang."
+    />
+    <meta name="twitter:card" content="summary" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070b0d'/%3E%3Ctext x='32' y='44' font-family='Arial,sans-serif' font-size='32' font-weight='700' text-anchor='middle' fill='%2365d7c8'%3ER%3C/text%3E%3C/svg%3E"
+    />
+    <script>
+      (function () {
+        try {
+          document.documentElement.dataset.theme =
+            localStorage.getItem("rplb-theme") === "light" ? "light" : "dark";
+        } catch (error) {
+          document.documentElement.dataset.theme = "dark";
+        }
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,12 +39,13 @@
     <link rel="stylesheet" href="css/main.css" />
   </head>
   <body>
+    <a class="skip-link" href="#home">Langsung ke konten</a>
     <canvas id="codeRain" aria-hidden="true"></canvas>
     <div class="progress-bar" id="progressBar"></div>
     <button class="back-top" id="backTop" type="button" title="Kembali ke atas">
       &#8593;
     </button>
-    <div class="toast" id="toast">Siap!</div>
+    <div class="toast" id="toast" role="status" aria-live="polite">Siap!</div>
 
     <div id="music-player" class="collapsed">
       <!-- Mini Pill Player saat di-minimize -->
@@ -49,7 +76,7 @@
               <span></span><span></span><span></span>
             </div>
             <span class="mp-label">Musik RPL B</span>
-            <span class="mp-track-num" id="mpTrackNum">1 / 30</span>
+            <span class="mp-track-num" id="mpTrackNum">1 / 31</span>
           </div>
           <button class="mp-collapse-btn" type="button" onclick="collapsePlayer()" title="Minimize">
             &#8722;
@@ -136,7 +163,7 @@
       </div>
     </div>
 
-    <nav>
+    <nav aria-label="Navigasi utama">
       <a href="#home" class="nav-logo"
         ><span>RPL B</span><span class="badge">STEMPERT</span></a
       >
@@ -170,9 +197,13 @@
         </button>
         <button
           class="hamburger"
+          id="hamburgerBtn"
           type="button"
           onclick="toggleMobileNav()"
           title="Menu"
+          aria-label="Buka menu navigasi"
+          aria-controls="mobileNav"
+          aria-expanded="false"
         >
           <span></span><span></span><span></span>
         </button>
@@ -189,7 +220,8 @@
       <a href="#kontak" onclick="toggleMobileNav()">Kontak</a>
     </div>
     
-    <section id="home">
+    <main>
+      <section id="home">
       <div class="hero-layout">
         <div class="hero-copy">
           <div class="eyebrow">&#10022; SMKN 2 Subang - 2025/2026</div>
@@ -312,6 +344,7 @@
           id="searchInput"
           type="text"
           placeholder="Cari nama taruna/i..."
+          aria-label="Cari nama taruna/i"
           oninput="filterMembers()"
         />
       </div>
@@ -333,16 +366,9 @@
         <button
           class="filter-btn"
           type="button"
-          onclick="filterByRole('Wakil Ketua', this)"
+          onclick="filterByRole('Sekretaris', this)"
         >
-          Wakil
-        </button>
-        <button
-          class="filter-btn"
-          type="button"
-          onclick="filterByRole('Sekertaris', this)"
-        >
-          Sekertaris
+          Sekretaris
         </button>
         <button
           class="filter-btn"
@@ -391,7 +417,7 @@
           <button class="coverflow-btn" type="button" onclick="prevGallery()">
             &lt;
           </button>
-          <div class="coverflow-count" id="galleryCount">1 / 32</div>
+          <div class="coverflow-count" id="galleryCount">1 / 63</div>
           <button class="coverflow-btn" type="button" onclick="nextGallery()">
             &gt;
           </button>
@@ -479,6 +505,8 @@
               id="contactName"
               type="text"
               placeholder="Masukkan nama kamu..."
+              autocomplete="name"
+              maxlength="80"
             />
           </div>
           <div class="form-group">
@@ -487,6 +515,8 @@
               id="contactEmail"
               type="email"
               placeholder="email@contoh.com"
+              autocomplete="email"
+              maxlength="120"
             />
           </div>
           <div class="form-group">
@@ -494,6 +524,7 @@
             <textarea
               id="contactMessage"
               placeholder="Tulis pesanmu di sini..."
+              maxlength="2000"
             ></textarea>
           </div>
           <button
@@ -507,6 +538,7 @@
         </div>
       </div>
     </section>
+    </main>
 
     <footer>
       <div class="footer-logo grad">
@@ -518,9 +550,22 @@
       </p>
     </footer>
 
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div
+      class="modal-overlay"
+      id="modalOverlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalName"
+      onclick="closeModal(event)"
+    >
       <div class="modal">
-        <button class="modal-close" type="button" onclick="closeModal()">
+        <button
+          class="modal-close"
+          id="modalCloseBtn"
+          type="button"
+          onclick="closeModal()"
+          aria-label="Tutup detail"
+        >
           X
         </button>
         <div class="modal-avatar" id="modalAvatar"></div>
