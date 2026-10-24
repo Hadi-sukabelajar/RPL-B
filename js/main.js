@@ -613,40 +613,49 @@ function filterByRole(role, button) {
    GALERI — COVERFLOW + LIGHTBOX
    ------------------------------------------------------------ */
 function galleryCardHTML(item, index) {
-  return `<button class="gallery-card" type="button" data-index="${index}" aria-label="Perbesar foto: ${esc(item.title)}">
-    <img data-src="${esc(item.img)}" alt="${esc(item.title)}" width="640" height="480" loading="lazy" decoding="async" draggable="false">
-    <span class="gallery-loading" aria-hidden="true">Memuat…</span>
-    <span class="gallery-fallback" aria-hidden="true">Foto belum tersedia</span>
-    <span class="gallery-overlay"><span class="gallery-label">// ${esc(item.title)}</span></span>
-    <span class="gallery-zoom" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="7" />
-        <path d="m20 20-4-4M11 8v6M8 11h6" stroke-linecap="round" />
-      </svg>
-    </span>
-  </button>`;
+  return `<div class="coverflow-slide" data-index="${index}" role="group" aria-roledescription="slide">
+    <button class="gallery-card" type="button" aria-label="Perbesar foto: ${esc(item.title)}">
+      <img data-src="${esc(item.img)}" alt="${esc(item.title)}" width="640" height="480" loading="lazy" decoding="async" draggable="false">
+      <span class="gallery-loading" aria-hidden="true">Memuat…</span>
+      <span class="gallery-fallback" aria-hidden="true">Foto belum tersedia</span>
+      <span class="gallery-overlay"><span class="gallery-label">// ${esc(item.title)}</span></span>
+      <span class="gallery-zoom" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-4-4M11 8v6M8 11h6" stroke-linecap="round" />
+        </svg>
+      </span>
+    </button>
+  </div>`;
 }
 
-let galleryObserver = null;
+function applyGalleryCoverflow() {
+  const grid = $("galleryGrid");
+  if (!grid) return;
+  const slides = grid.querySelectorAll(".coverflow-slide");
+  if (!slides.length) return;
 
-function initGalleryLazyLoad() {
-  const images = Array.from(document.querySelectorAll("#galleryGrid img[data-src]"));
-  if (!images.length) return;
+  const cardWidth = slides[0].offsetWidth || 320;
+  slides.forEach((slide, index) => {
+    const offset = shortOffset(index, activeGallery, galleryItems.length);
+    const hidden = Math.abs(offset) > 2;
+    slide.classList.remove("active", "near", "far", "hidden");
+    slide.classList.add(coverClass(offset));
+    slide.style.transform = coverTransform(offset, cardWidth);
+    slide.setAttribute("aria-hidden", hidden ? "true" : "false");
+    if (hidden) slide.setAttribute("inert", "");
+    else slide.removeAttribute("inert");
 
-  if (!("IntersectionObserver" in window)) {
-    images.forEach(lazyLoadImage);
-    return;
-  }
+    const button = slide.querySelector(".gallery-card");
+    if (button) {
+      if (offset === 0) button.setAttribute("aria-current", "true");
+      else button.removeAttribute("aria-current");
+    }
+    if (Math.abs(offset) <= 2) lazyLoadImage(slide.querySelector("img[data-src]"));
+  });
 
-  if (galleryObserver) galleryObserver.disconnect();
-  galleryObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      galleryObserver.unobserve(entry.target);
-      lazyLoadImage(entry.target);
-    });
-  }, { rootMargin: "240px 0px" });
-  images.forEach((image) => galleryObserver.observe(image));
+  const count = $("galleryCount");
+  if (count) count.textContent = galleryItems.length ? `${activeGallery + 1} / ${galleryItems.length}` : "0 / 0";
 }
 
 function renderGallery() {
@@ -661,7 +670,21 @@ function renderGallery() {
   grid.innerHTML = galleryItems.map(galleryCardHTML).join("");
   const status = $("galleryStatus");
   if (status) status.textContent = `${galleryItems.length} momen terabadikan`;
-  requestAnimationFrame(initGalleryLazyLoad);
+  requestAnimationFrame(applyGalleryCoverflow);
+}
+
+function setGallerySlide(index) {
+  if (!galleryItems.length) return;
+  activeGallery = ((index % galleryItems.length) + galleryItems.length) % galleryItems.length;
+  applyGalleryCoverflow();
+}
+
+function nextGallery() {
+  setGallerySlide(activeGallery + 1);
+}
+
+function prevGallery() {
+  setGallerySlide(activeGallery - 1);
 }
 
 function buildLightbox() {
@@ -740,6 +763,7 @@ function openLightbox(index) {
   activeGallery = ((index % galleryItems.length) + galleryItems.length) % galleryItems.length;
   lastFocusBeforeLightbox = document.activeElement;
   updateLightbox();
+  applyGalleryCoverflow();
   lightboxOpen = true;
   lightboxEl.inert = false;
   lightboxEl.setAttribute("aria-hidden", "false");
@@ -768,7 +792,7 @@ function isLightboxOpen() {
 
 function lightboxStep(direction) {
   if (!galleryItems.length) return;
-  activeGallery = (activeGallery + direction + galleryItems.length) % galleryItems.length;
+  setGallerySlide(activeGallery + (direction > 0 ? 1 : -1));
   updateLightbox();
 }
 
@@ -1655,6 +1679,7 @@ function initScroll() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
       applyMemberCoverflow();
+      applyGalleryCoverflow();
     }, 160);
   }, { passive: true });
 
@@ -1681,13 +1706,19 @@ function initReveal() {
 function focusedCarousel() {
   const active = document.activeElement;
   if (!active || !active.closest) return null;
+  if (active.closest("#gallery")) return "gallery";
   if (active.closest("#anggota")) return "member";
   return null;
 }
 
 function centeredCarousel() {
   const middle = window.innerHeight / 2;
+  const gallery = $("gallery");
   const membersSection = $("anggota");
+  if (gallery) {
+    const rect = gallery.getBoundingClientRect();
+    if (rect.top <= middle && rect.bottom >= middle) return "gallery";
+  }
   if (membersSection) {
     const rect = membersSection.getBoundingClientRect();
     if (rect.top <= middle && rect.bottom >= middle) return "member";
@@ -1737,10 +1768,12 @@ function initKeyboard() {
     if (!carousel) return;
     if (event.key === "ArrowRight") {
       event.preventDefault();
-      nextMember();
+      if (carousel === "gallery") nextGallery();
+      else nextMember();
     } else if (event.key === "ArrowLeft") {
       event.preventDefault();
-      prevMember();
+      if (carousel === "gallery") prevGallery();
+      else prevMember();
     }
   });
 }
@@ -1802,13 +1835,19 @@ function initGridInteractions() {
     galleryGrid.addEventListener("click", (event) => {
       const card = event.target.closest(".gallery-card");
       if (!card || card.classList.contains("error")) return;
-      const index = Number(card.dataset.index);
-      if (Number.isInteger(index)) openLightbox(index);
+      const slide = card.closest(".coverflow-slide");
+      const slides = Array.from(galleryGrid.querySelectorAll(".coverflow-slide"));
+      const index = slides.indexOf(slide);
+      if (index < 0) return;
+      if (index === activeGallery) openLightbox(index);
+      else setGallerySlide(index);
     });
   }
 
   const memberStage = $("memberStage");
+  const galleryStage = $("galleryStage");
   bindSwipe(memberStage, nextMember, prevMember);
+  bindSwipe(galleryStage, nextGallery, prevGallery);
 }
 
 function initPageNavigation() {

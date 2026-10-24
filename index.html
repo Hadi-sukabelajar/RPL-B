@@ -637,11 +637,30 @@
           </p>
         </div>
         <p class="result-status" id="galleryStatus" role="status">67 momen terabadikan</p>
-        <div class="gallery-grid" id="galleryGrid" role="group" aria-label="Galeri momen RPL B"></div>
-        <p class="gallery-hint">
-          Pilih foto untuk melihat versi lebih besar · gunakan tombol panah atau
-          <kbd>Esc</kbd> untuk menutup
-        </p>
+        <div
+          class="coverflow-wrap reveal"
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Galeri momen RPL B"
+        >
+          <div class="coverflow-stage gallery-stage" id="galleryStage">
+            <div class="coverflow-track" id="galleryGrid"></div>
+          </div>
+          <div class="coverflow-controls">
+            <button class="coverflow-btn" type="button" onclick="prevGallery()" aria-label="Foto sebelumnya">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <path d="m15 18-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <div class="coverflow-count" id="galleryCount" aria-live="polite">1 / 67</div>
+            <button class="coverflow-btn" type="button" onclick="nextGallery()" aria-label="Foto berikutnya">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+          <p class="coverflow-hint">Klik foto tengah untuk memperbesar · geser untuk berpindah</p>
+        </div>
       </section>
 
       <section id="kegiatan" aria-labelledby="kegiatanTitle">

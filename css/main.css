@@ -5362,16 +5362,6 @@ section {
   white-space: nowrap;
 }
 
-kbd {
-  padding: 2px 6px;
-  border: 1px solid var(--border2);
-  border-radius: var(--radius-xs);
-  background: var(--surface2);
-  color: var(--text2);
-  font-family: Consolas, "Courier New", monospace;
-  font-size: 0.72em;
-}
-
 /* Latar lebih tenang: satu aksen lembut, tanpa garis diagonal acak */
 body {
   background:
@@ -5461,6 +5451,10 @@ body:after {
   border-radius: var(--radius-lg);
   background: var(--surface2);
   box-shadow: var(--shadow-sm);
+}
+
+.gallery-card.error {
+  cursor: default;
 }
 
 .timeline-content {
@@ -5596,100 +5590,6 @@ body:after {
   font-size: 1.4rem;
 }
 
-/* ---------- Galeri: grid responsif ---------- */
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  max-width: var(--container);
-  margin: 0 auto;
-}
-
-@media (min-width: 640px) {
-  .gallery-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 13px;
-  }
-}
-
-@media (min-width: 960px) {
-  .gallery-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
-  }
-}
-
-.gallery-grid .gallery-card {
-  height: auto;
-  aspect-ratio: 4 / 3;
-  border-radius: var(--radius-lg);
-  background: var(--surface2);
-}
-
-.gallery-grid .gallery-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  height: auto;
-  background:
-    linear-gradient(100deg,
-      var(--surface2) 20%,
-      rgba(255, 255, 255, 0.055) 40%,
-      var(--surface2) 60%);
-  background-size: 220% 100%;
-  animation: gallerySkeleton 1.5s ease-in-out infinite;
-}
-
-.gallery-grid .gallery-card img {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.gallery-grid .gallery-card:hover img {
-  transform: scale(1.035);
-}
-
-.gallery-grid .gallery-card .gallery-overlay,
-.gallery-grid .gallery-card .gallery-fallback,
-.gallery-grid .gallery-card .gallery-zoom {
-  z-index: 2;
-}
-
-.gallery-grid .gallery-card.error::before {
-  animation: none;
-}
-
-.gallery-grid .gallery-card.error {
-  cursor: default;
-}
-
-.gallery-grid .empty-state {
-  grid-column: 1 / -1;
-}
-
-@keyframes gallerySkeleton {
-  0% {
-    background-position: 120% 0;
-  }
-
-  100% {
-    background-position: -120% 0;
-  }
-}
-
-.gallery-hint {
-  max-width: 56ch;
-  margin: 18px auto 0;
-  color: var(--text3);
-  font-size: 0.76rem;
-  line-height: 1.6;
-  text-align: center;
-}
-
 /* Empty state anggota: kontrol carousel tidak perlu ditampilkan */
 .coverflow-wrap.is-empty .coverflow-controls,
 .coverflow-wrap.is-empty .coverflow-hint {
@@ -5767,19 +5667,6 @@ body:after {
   background: #ffffff;
 }
 
-:root[data-theme="light"] .gallery-grid .gallery-card {
-  background: var(--surface2);
-}
-
-:root[data-theme="light"] .gallery-grid .gallery-card::before {
-  background:
-    linear-gradient(100deg,
-      rgba(230, 238, 235, 0.9) 20%,
-      rgba(255, 255, 255, 0.95) 40%,
-      rgba(230, 238, 235, 0.9) 60%);
-  background-size: 220% 100%;
-}
-
 :root[data-theme="light"] .btn-primary {
   background: var(--accent);
   color: #ffffff;
@@ -5791,10 +5678,6 @@ body:after {
 
 /* ---------- Gerak berkurang ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .gallery-grid .gallery-card::before {
-    animation: none;
-  }
-
   .btn-primary:hover,
   .btn-ghost:hover {
     transform: none;
