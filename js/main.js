@@ -970,7 +970,7 @@ function syncDataCounts() {
 const storedVolume = parseFloat(storage.get("rplb-volume", "0.7"));
 const initialVolume = Number.isFinite(storedVolume) ? Math.min(1, Math.max(0, storedVolume)) : 0.7;
 const mpAudio = new Audio();
-mpAudio.preload = "none";
+mpAudio.preload = "auto";
 mpAudio.volume = initialVolume;
 let mpPrevVolume = initialVolume > 0 ? initialVolume : 0.7;
 let mpCurrentTrack = 0;
@@ -978,6 +978,7 @@ let mpIsPlaying = false;
 let mpIsLooping = false;
 let mpIsShuffling = false;
 let mpFailStreak = 0;
+let mpAutoplayArmed = false;
 
 const ICON_PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" /></svg>';
 const ICON_PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM14 5h4v14h-4z" /></svg>';
@@ -997,6 +998,62 @@ function mpSetStatus(message, kind) {
   status.textContent = message || "";
   status.classList.toggle("info", kind === "info");
   status.classList.toggle("error", kind === "error");
+}
+
+/* Browser modern memblokir audio bersuara sebelum ada interaksi.
+   Autoplay dicoba saat halaman dibuka; bila ditolak, pemutaran
+   dimulai pada interaksi pertama pengguna. */
+function mpDisarmAutoplay() {
+  if (!mpAutoplayArmed) return;
+  mpAutoplayArmed = false;
+  document.removeEventListener("pointerdown", mpAutoplayGesture, true);
+  document.removeEventListener("keydown", mpAutoplayGesture, true);
+}
+
+function mpArmAutoplay() {
+  if (mpAutoplayArmed) return;
+  mpAutoplayArmed = true;
+  document.addEventListener("pointerdown", mpAutoplayGesture, true);
+  document.addEventListener("keydown", mpAutoplayGesture, true);
+}
+
+function mpAutoplayGesture(event) {
+  if (!mpAutoplayArmed) return;
+  if (event.type === "keydown" && event.key !== "Enter" && event.key !== " ") return;
+  const target = event.target;
+  if (target && target.closest && target.closest(".mp-controls, #music-player, #musicBtn")) {
+    mpDisarmAutoplay();
+    return;
+  }
+  mpDisarmAutoplay();
+  if (!mpAudio.paused) return;
+  mpPlay("gesture");
+}
+
+function mpPlay(source) {
+  if (!playlist.length) {
+    mpSetStatus("Playlist belum tersedia.", "error");
+    return;
+  }
+  if (!mpAudio.src) mpLoadTrack(mpCurrentTrack, false);
+  if (source !== "track") mpSetStatus("Memuat lagu…", "info");
+  const promise = mpAudio.play();
+  if (!promise || typeof promise.then !== "function") return;
+  promise.then(() => {
+    mpSetStatus("");
+  }).catch((error) => {
+    mpIsPlaying = false;
+    updatePlayerUI();
+    if (error && error.name === "NotAllowedError") {
+      mpSetStatus("Klik di mana saja untuk memulai musik.", "info");
+      mpArmAutoplay();
+      if (source === "autoplay") {
+        showToast("Musik siap — klik di mana saja untuk mulai");
+      }
+    } else {
+      mpSetStatus("Lagu ini belum bisa diputar. Coba lagu berikutnya.", "error");
+    }
+  });
 }
 
 function mpFmtTime(seconds) {
@@ -1093,17 +1150,7 @@ function mpLoadTrack(index, autoplay) {
   if ($("mpCurrent")) $("mpCurrent").textContent = "0:00";
   if ($("mpDuration")) $("mpDuration").textContent = "0:00";
   updatePlayerUI();
-  if (autoplay) {
-    mpAudio.play().catch((error) => {
-      if (error && error.name === "NotAllowedError") {
-        mpSetStatus("Tekan tombol putar untuk memulai musik.", "info");
-      } else {
-        mpSetStatus("Lagu ini belum bisa diputar. Coba lagu lain.", "error");
-      }
-      mpIsPlaying = false;
-      updatePlayerUI();
-    });
-  }
+  if (autoplay) mpPlay("track");
 }
 
 function mpTogglePlay() {
@@ -1112,33 +1159,26 @@ function mpTogglePlay() {
     return;
   }
   if (mpAudio.paused || mpAudio.ended) {
-    if (!mpAudio.src) mpLoadTrack(mpCurrentTrack, false);
-    mpSetStatus("Memuat lagu…", "info");
-    mpAudio.play().then(() => {
-      mpSetStatus("");
-    }).catch((error) => {
-      mpIsPlaying = false;
-      updatePlayerUI();
-      if (error && error.name === "NotAllowedError") {
-        mpSetStatus("Browser memblokir pemutaran otomatis. Tekan tombol putar sekali lagi.", "info");
-      } else {
-        mpSetStatus("Lagu ini belum bisa diputar. Coba lagu berikutnya.", "error");
-      }
-    });
+    mpPlay("user");
   } else {
     mpAudio.pause();
   }
 }
 
-function mpNext() {
-  if (!playlist.length) return;
+function mpNextIndex() {
+  if (playlist.length < 2) return 0;
   let next = mpCurrentTrack + 1;
-  if (mpIsShuffling && playlist.length > 1) {
+  if (mpIsShuffling) {
     do {
       next = Math.floor(Math.random() * playlist.length);
     } while (next === mpCurrentTrack);
   }
-  mpLoadTrack(next, !mpAudio.paused);
+  return ((next % playlist.length) + playlist.length) % playlist.length;
+}
+
+function mpNext() {
+  if (!playlist.length) return;
+  mpLoadTrack(mpNextIndex(), !mpAudio.paused);
 }
 
 function mpPrev() {
@@ -1270,12 +1310,14 @@ function initPlayer() {
   mpAudio.addEventListener("durationchange", mpUpdateProgress);
   mpAudio.addEventListener("play", () => {
     mpIsPlaying = true;
+    mpDisarmAutoplay();
     mpSetStatus("");
     updatePlayerUI();
   });
   mpAudio.addEventListener("playing", () => {
     mpIsPlaying = true;
     mpFailStreak = 0;
+    mpDisarmAutoplay();
     mpSetStatus("");
     updatePlayerUI();
   });
@@ -1284,14 +1326,14 @@ function initPlayer() {
     updatePlayerUI();
   });
   mpAudio.addEventListener("ended", () => {
-    if (!mpIsLooping) mpNext();
+    if (!mpIsLooping) mpLoadTrack(mpNextIndex(), true);
   });
   mpAudio.addEventListener("waiting", () => {
     if (mpIsPlaying) mpSetStatus("Memuat lagu…", "info");
   });
   mpAudio.addEventListener("canplay", () => {
     const status = $("mpStatus");
-    if (status && status.classList.contains("info")) mpSetStatus("");
+    if (status && status.textContent === "Memuat lagu…") mpSetStatus("");
   });
   mpAudio.addEventListener("error", () => {
     const wasPlaying = mpIsPlaying;
@@ -1322,6 +1364,10 @@ function initPlayer() {
       /* Media Session tidak didukung penuh */
     }
   }
+
+  /* Langsung coba putar lagu pertama; jika browser memblokir,
+     pemutaran dimulai pada interaksi pertama pengguna. */
+  mpPlay("autoplay");
 }
 
 /* ------------------------------------------------------------
