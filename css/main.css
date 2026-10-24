@@ -5383,7 +5383,7 @@ body:after {
 
 @media (min-width: 921px) {
   .code-window {
-    animation: none;
+    animation: windowFloat 7s ease-in-out infinite;
     transform: rotateY(-6deg) rotateX(2deg);
   }
 }
