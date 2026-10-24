@@ -5331,3 +5331,512 @@ section {
     transition: none;
   }
 }
+
+/* ============================================================
+   FASE 2 — PENYEMPURNAAN UI/UX
+   Lapisan ini menormalkan radius, bayangan, permukaan, dan
+   dekorasi agar tampilan lebih tenang, konsisten, dan terbaca.
+   ============================================================ */
+
+:root {
+  --radius-xs: 8px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --shadow-sm: 0 10px 28px rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 18px 48px rgba(0, 0, 0, 0.24);
+  --shadow-lg: 0 28px 80px rgba(0, 0, 0, 0.34);
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
+}
+
+kbd {
+  padding: 2px 6px;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-xs);
+  background: var(--surface2);
+  color: var(--text2);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.72em;
+}
+
+/* Latar lebih tenang: satu aksen lembut, tanpa garis diagonal acak */
+body {
+  background:
+    radial-gradient(circle at 8% 5%, rgba(101, 215, 200, 0.07), transparent 30rem),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+}
+
+body:after {
+  display: none;
+}
+
+/* Hentikan animasi dekoratif terus-menerus; sisakan code rain + caret */
+.orbit,
+.terminal-card,
+.hero-chip,
+.eyebrow-dot {
+  animation: none;
+}
+
+@media (min-width: 921px) {
+  .code-window {
+    animation: none;
+    transform: rotateY(-6deg) rotateX(2deg);
+  }
+}
+
+/* ---------- Hierarki landing page ---------- */
+.hero-title {
+  text-wrap: balance;
+}
+
+.hero-title-main {
+  display: block;
+}
+
+.hero-sub {
+  display: block;
+  margin-top: 14px;
+  color: var(--text3);
+  font-family: "DM Sans", sans-serif;
+  font-size: clamp(0.8rem, 1.2vw, 0.94rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  text-transform: none;
+}
+
+.hero-kicker {
+  letter-spacing: 0.12em;
+}
+
+.eyebrow {
+  border-color: var(--border);
+  background: var(--surface);
+}
+
+/* ---------- Permukaan & radius konsisten ---------- */
+.hero-stat,
+.member-card,
+.gallery-card,
+.timeline-content,
+.kontak-form,
+.kontak-link,
+.search-bar,
+.modal,
+.wk-card,
+.code-window,
+.terminal-card {
+  background-color: var(--surface);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.hero-stat {
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.member-card {
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.gallery-card {
+  border-radius: var(--radius-lg);
+  background: var(--surface2);
+  box-shadow: var(--shadow-sm);
+}
+
+.timeline-content {
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.kontak-form {
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.kontak-link {
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.search-bar {
+  border-radius: var(--radius-full);
+}
+
+.modal {
+  border-radius: var(--radius-xl);
+  background: var(--surface-solid);
+}
+
+.wk-card {
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.code-window {
+  border-radius: var(--radius-lg);
+  background: var(--surface-solid);
+  box-shadow: var(--shadow-md);
+}
+
+.terminal-card {
+  border-radius: var(--radius-md);
+  background: var(--surface-solid);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Satu motif garis aksen, tanpa glow berlebihan */
+.hero-stat:before,
+.member-card:before,
+.wk-card:before {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.7;
+}
+
+.wk-glow {
+  display: none;
+}
+
+/* ---------- Tombol konsisten ---------- */
+.btn-primary,
+.btn-ghost {
+  min-height: 46px;
+  padding: 11px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  box-shadow: none;
+}
+
+.btn-primary {
+  border-color: transparent;
+  background: var(--accent);
+  color: #04110f;
+}
+
+.btn-primary:hover {
+  background: var(--accent-strong);
+  color: #04110f;
+}
+
+.btn-ghost {
+  background: transparent;
+}
+
+.btn-ghost:hover {
+  background: var(--surface2);
+}
+
+.btn-primary:hover,
+.btn-ghost:hover {
+  transform: translateY(-1px);
+}
+
+.icon-btn,
+.hamburger {
+  border-radius: var(--radius-sm);
+}
+
+.filter-btn {
+  min-height: 36px;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-group input,
+.form-group textarea {
+  border-radius: var(--radius-sm);
+}
+
+.form-submit {
+  margin-top: 4px;
+}
+
+.form-privacy {
+  margin-top: 2px;
+  color: var(--text3);
+  font-size: 0.72rem;
+  line-height: 1.55;
+  text-align: center;
+}
+
+/* ---------- Statistik: state jelas, tanpa angka nol palsu ---------- */
+.hero-stats[aria-busy="true"] .stat-num {
+  opacity: 0.55;
+}
+
+.stat-num[data-state="empty"] {
+  color: var(--text3);
+}
+
+.stat-num[data-state="error"] {
+  color: var(--coral);
+  font-size: 1.4rem;
+}
+
+/* ---------- Galeri: grid responsif ---------- */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .gallery-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 13px;
+  }
+}
+
+@media (min-width: 960px) {
+  .gallery-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+.gallery-grid .gallery-card {
+  height: auto;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+  background: var(--surface2);
+}
+
+.gallery-grid .gallery-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  height: auto;
+  background:
+    linear-gradient(100deg,
+      var(--surface2) 20%,
+      rgba(255, 255, 255, 0.055) 40%,
+      var(--surface2) 60%);
+  background-size: 220% 100%;
+  animation: gallerySkeleton 1.5s ease-in-out infinite;
+}
+
+.gallery-grid .gallery-card img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-grid .gallery-card:hover img {
+  transform: scale(1.035);
+}
+
+.gallery-grid .gallery-card .gallery-overlay,
+.gallery-grid .gallery-card .gallery-fallback,
+.gallery-grid .gallery-card .gallery-zoom {
+  z-index: 2;
+}
+
+.gallery-grid .gallery-card.error::before {
+  animation: none;
+}
+
+.gallery-grid .gallery-card.error {
+  cursor: default;
+}
+
+.gallery-grid .empty-state {
+  grid-column: 1 / -1;
+}
+
+@keyframes gallerySkeleton {
+  0% {
+    background-position: 120% 0;
+  }
+
+  100% {
+    background-position: -120% 0;
+  }
+}
+
+.gallery-hint {
+  max-width: 56ch;
+  margin: 18px auto 0;
+  color: var(--text3);
+  font-size: 0.76rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Empty state anggota: kontrol carousel tidak perlu ditampilkan */
+.coverflow-wrap.is-empty .coverflow-controls,
+.coverflow-wrap.is-empty .coverflow-hint {
+  display: none;
+}
+
+.coverflow-wrap.is-empty .coverflow-stage {
+  min-height: 300px;
+}
+
+/* ---------- Status pemutar musik ---------- */
+.mp-status:not(:empty) {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mp-status:not(:empty)::before {
+  content: "";
+  flex: none;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.mp-status.error {
+  color: var(--coral);
+}
+
+.mp-status.info {
+  color: var(--text3);
+}
+
+/* ---------- Lightbox fallback ---------- */
+.lightbox-fallback {
+  max-width: 34ch;
+  padding: 24px;
+  color: var(--text2);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.lightbox-img.loaded {
+  opacity: 1;
+}
+
+.lightbox-img {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+/* ---------- Tema terang: permukaan solid, bukan gradient bertumpuk ---------- */
+:root[data-theme="light"] body {
+  background:
+    radial-gradient(circle at 8% 5%, rgba(10, 124, 109, 0.07), transparent 30rem),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+}
+
+:root[data-theme="light"] .hero-stat,
+:root[data-theme="light"] .member-card,
+:root[data-theme="light"] .gallery-card,
+:root[data-theme="light"] .timeline-content,
+:root[data-theme="light"] .kontak-form,
+:root[data-theme="light"] .kontak-link,
+:root[data-theme="light"] .search-bar,
+:root[data-theme="light"] .modal,
+:root[data-theme="light"] .wk-card {
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: var(--shadow-sm);
+}
+
+:root[data-theme="light"] .code-window,
+:root[data-theme="light"] .terminal-card {
+  background: #ffffff;
+}
+
+:root[data-theme="light"] .gallery-grid .gallery-card {
+  background: var(--surface2);
+}
+
+:root[data-theme="light"] .gallery-grid .gallery-card::before {
+  background:
+    linear-gradient(100deg,
+      rgba(230, 238, 235, 0.9) 20%,
+      rgba(255, 255, 255, 0.95) 40%,
+      rgba(230, 238, 235, 0.9) 60%);
+  background-size: 220% 100%;
+}
+
+:root[data-theme="light"] .btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+:root[data-theme="light"] .btn-primary:hover {
+  background: var(--accent-strong);
+}
+
+/* ---------- Gerak berkurang ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .gallery-grid .gallery-card::before {
+    animation: none;
+  }
+
+  .btn-primary:hover,
+  .btn-ghost:hover {
+    transform: none;
+  }
+}
+
+/* Dekorasi garis diagonal hero dihapus agar teks utama lebih tenang */
+#home:before {
+  display: none;
+}
+
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Chip Python sebelumnya memiliki top dan bottom sekaligus */
+.hero-chip.python {
+  bottom: auto;
+}
+
+/* Saat JavaScript mati, statistik statis tetap terbaca penuh */
+html.no-js .hero-stats[aria-busy="true"] .stat-num {
+  opacity: 1;
+}
+
+/* Loading state galeri: teks halus sampai gambar selesai dimuat */
+.gallery-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  color: var(--text3);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.gallery-card img.loaded ~ .gallery-loading,
+.gallery-card.error .gallery-loading {
+  display: none;
+}

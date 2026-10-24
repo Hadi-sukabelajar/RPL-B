@@ -380,24 +380,24 @@
               SMKN 2 Subang · 2025/2026
               <span class="eyebrow-badge">STEMPERT</span>
             </div>
-            <div class="hero-kicker">XRPL-B / SOFTWARE ENGINEERING</div>
+            <div class="hero-kicker">// RPL B · SOFTWARE ENGINEERING</div>
             <h1 class="hero-title" id="heroTitle">
-              <span class="grad">Software Engineering</span>
-              <span class="hero-sub">Rekayasa Perangkat Lunak B</span>
+              <span class="hero-title-main">Rekayasa Perangkat Lunak <span class="grad">B</span></span>
+              <span class="hero-sub">Kelas STEMPERT · SMKN 2 Subang</span>
             </h1>
             <p class="hero-desc">
-              Keluarga kecil yang solid — <strong>38 taruna/i</strong> penuh
-              semangat, kreativitas, dan dedikasi tinggi untuk bertumbuh bersama
-              di dunia <span class="grad">teknologi</span>.
+              Kami adalah <strong>38 taruna/i</strong> RPL B SMKN 2 Subang —
+              belajar membangun perangkat lunak, berkreasi dengan teknologi, dan
+              bertumbuh sebagai satu keluarga.
             </p>
-            <div class="hero-stats" aria-label="Ringkasan kelas RPL B">
+            <div class="hero-stats" id="heroStats" aria-label="Ringkasan kelas RPL B" aria-busy="true">
               <div class="hero-stat">
                 <span class="stat-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </span>
-                <span class="stat-num" data-count="members" data-target="38">38</span>
+                <span class="stat-num" data-count="members">38</span>
                 <span class="stat-label">Taruna/i</span>
               </div>
               <div class="hero-stat">
@@ -406,7 +406,7 @@
                     <path d="m3 10 9-7 9 7M5 9v11h14V9M9 20v-7h6v7" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </span>
-                <span class="stat-num" data-count="classes" data-target="1">1</span>
+                <span class="stat-num" data-count="classes">1</span>
                 <span class="stat-label">Kelas</span>
               </div>
               <div class="hero-stat">
@@ -416,7 +416,7 @@
                     <path d="M8 3v4M16 3v4M3 10h18M8 15h3" stroke-linecap="round" />
                   </svg>
                 </span>
-                <span class="stat-num" data-count="activities" data-target="6">6</span>
+                <span class="stat-num" data-count="activities">6</span>
                 <span class="stat-label">Kegiatan</span>
               </div>
               <div class="hero-stat">
@@ -427,24 +427,23 @@
                     <path d="m21 15-5-5L5 21" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </span>
-                <span class="stat-num" data-count="gallery" data-target="67">67</span>
+                <span class="stat-num" data-count="gallery">67</span>
                 <span class="stat-label">Momen</span>
               </div>
             </div>
+            <span class="sr-only" id="statsStatus" role="status" aria-live="polite"></span>
             <div class="hero-btns">
               <a class="btn-primary" href="#tentang">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                   <path d="M12 3v18M3 12h18" stroke-linecap="round" />
                 </svg>
-                Kenali Kami
+                Kenali Kelas
               </a>
-              <a class="btn-ghost" href="#gallery">
+              <a class="btn-ghost" href="#anggota">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                  <rect x="3" y="3" width="18" height="18" rx="3" />
-                  <circle cx="9" cy="9" r="2" />
-                  <path d="m21 15-5-5L5 21" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-                Lihat Galeri
+                Lihat Taruna/i
               </a>
             </div>
           </div>
@@ -638,30 +637,11 @@
           </p>
         </div>
         <p class="result-status" id="galleryStatus" role="status">67 momen terabadikan</p>
-        <div
-          class="coverflow-wrap reveal"
-          role="region"
-          aria-roledescription="carousel"
-          aria-label="Galeri momen RPL B"
-        >
-          <div class="coverflow-stage gallery-stage" id="galleryStage">
-            <div class="coverflow-track" id="galleryGrid"></div>
-          </div>
-          <div class="coverflow-controls">
-            <button class="coverflow-btn" type="button" onclick="prevGallery()" aria-label="Foto sebelumnya">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                <path d="m15 18-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </button>
-            <div class="coverflow-count" id="galleryCount" aria-live="polite">1 / 67</div>
-            <button class="coverflow-btn" type="button" onclick="nextGallery()" aria-label="Foto berikutnya">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </button>
-          </div>
-          <p class="coverflow-hint">Klik foto tengah untuk memperbesar · geser untuk berpindah</p>
-        </div>
+        <div class="gallery-grid" id="galleryGrid" role="group" aria-label="Galeri momen RPL B"></div>
+        <p class="gallery-hint">
+          Pilih foto untuk melihat versi lebih besar · gunakan tombol panah atau
+          <kbd>Esc</kbd> untuk menutup
+        </p>
       </section>
 
       <section id="kegiatan" aria-labelledby="kegiatanTitle">
@@ -764,7 +744,7 @@
             </div>
           </div>
 
-          <form class="kontak-form reveal" id="contactForm" novalidate>
+          <form class="kontak-form reveal" id="contactForm" novalidate aria-describedby="formStatus">
             <div class="form-head">
               <span class="form-kicker">// KIRIM PESAN</span>
               <h3>Ada yang ingin disampaikan?</h3>
@@ -807,7 +787,7 @@
                 placeholder="Tulis pesanmu di sini…"
                 maxlength="2000"
                 required
-                aria-describedby="contactMessageError"
+                aria-describedby="contactMessageError messageCount"
               ></textarea>
               <div class="field-meta">
                 <span class="field-error" id="contactMessageError"></span>
@@ -822,6 +802,9 @@
                 <path d="M22 2 11 13" stroke-linecap="round" />
               </svg>
             </button>
+            <p class="form-privacy">
+              Data yang kamu kirim hanya digunakan untuk membalas pesan ini.
+            </p>
           </form>
         </div>
       </section>

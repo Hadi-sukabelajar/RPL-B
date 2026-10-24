@@ -372,7 +372,6 @@ let activeGallery = 0;
 let filteredMembers = members.slice();
 let toastTimer = null;
 let memberTouch = null;
-let galleryTouch = null;
 let lightboxEl = null;
 let lightboxOpen = false;
 let modalOpen = false;
@@ -450,7 +449,12 @@ function lazyLoadImage(img) {
   img.addEventListener("error", () => {
     img.remove();
     const card = img.closest(".gallery-card");
-    if (card) card.classList.add("error");
+    if (card) {
+      card.classList.add("error");
+      card.setAttribute("aria-disabled", "true");
+      const label = card.getAttribute("aria-label") || "";
+      card.setAttribute("aria-label", label.replace("Perbesar foto:", "Foto tidak tersedia:"));
+    }
   }, { once: true });
   img.src = src;
 }
@@ -519,6 +523,7 @@ function updateMemberStatus() {
 function renderMembers() {
   const grid = $("membersGrid");
   if (!grid) return;
+  const wrap = grid.closest(".coverflow-wrap");
   const query = currentSearch.trim().toLowerCase();
   filteredMembers = members.filter((member) => {
     const matchesRole = currentFilter === "all" || member.role === currentFilter;
@@ -527,6 +532,7 @@ function renderMembers() {
   });
 
   if (activeMember >= filteredMembers.length) activeMember = 0;
+  if (wrap) wrap.classList.toggle("is-empty", filteredMembers.length === 0);
 
   if (!filteredMembers.length) {
     grid.innerHTML = `<div class="empty-state">
@@ -607,48 +613,40 @@ function filterByRole(role, button) {
    GALERI — COVERFLOW + LIGHTBOX
    ------------------------------------------------------------ */
 function galleryCardHTML(item, index) {
-  return `<div class="coverflow-slide" data-index="${index}" role="group" aria-roledescription="slide">
-    <button class="gallery-card" type="button" aria-label="Perbesar foto: ${esc(item.title)}">
-      <img data-src="${esc(item.img)}" alt="${esc(item.title)}" loading="lazy" decoding="async" draggable="false">
-      <span class="gallery-fallback" aria-hidden="true">Foto belum tersedia</span>
-      <span class="gallery-overlay"><span class="gallery-label">// ${esc(item.title)}</span></span>
-      <span class="gallery-zoom" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="7" />
-          <path d="m20 20-4-4M11 8v6M8 11h6" stroke-linecap="round" />
-        </svg>
-      </span>
-    </button>
-  </div>`;
+  return `<button class="gallery-card" type="button" data-index="${index}" aria-label="Perbesar foto: ${esc(item.title)}">
+    <img data-src="${esc(item.img)}" alt="${esc(item.title)}" width="640" height="480" loading="lazy" decoding="async" draggable="false">
+    <span class="gallery-loading" aria-hidden="true">Memuat…</span>
+    <span class="gallery-fallback" aria-hidden="true">Foto belum tersedia</span>
+    <span class="gallery-overlay"><span class="gallery-label">// ${esc(item.title)}</span></span>
+    <span class="gallery-zoom" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-4-4M11 8v6M8 11h6" stroke-linecap="round" />
+      </svg>
+    </span>
+  </button>`;
 }
 
-function applyGalleryCoverflow() {
-  const grid = $("galleryGrid");
-  if (!grid) return;
-  const slides = grid.querySelectorAll(".coverflow-slide");
-  if (!slides.length) return;
+let galleryObserver = null;
 
-  const cardWidth = slides[0].offsetWidth || 320;
-  slides.forEach((slide, index) => {
-    const offset = shortOffset(index, activeGallery, galleryItems.length);
-    const hidden = Math.abs(offset) > 2;
-    slide.classList.remove("active", "near", "far", "hidden");
-    slide.classList.add(coverClass(offset));
-    slide.style.transform = coverTransform(offset, cardWidth);
-    slide.setAttribute("aria-hidden", hidden ? "true" : "false");
-    if (hidden) slide.setAttribute("inert", "");
-    else slide.removeAttribute("inert");
+function initGalleryLazyLoad() {
+  const images = Array.from(document.querySelectorAll("#galleryGrid img[data-src]"));
+  if (!images.length) return;
 
-    const button = slide.querySelector(".gallery-card");
-    if (button) {
-      if (offset === 0) button.setAttribute("aria-current", "true");
-      else button.removeAttribute("aria-current");
-    }
-    if (Math.abs(offset) <= 2) lazyLoadImage(slide.querySelector("img[data-src]"));
-  });
+  if (!("IntersectionObserver" in window)) {
+    images.forEach(lazyLoadImage);
+    return;
+  }
 
-  const count = $("galleryCount");
-  if (count) count.textContent = galleryItems.length ? `${activeGallery + 1} / ${galleryItems.length}` : "0 / 0";
+  if (galleryObserver) galleryObserver.disconnect();
+  galleryObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      galleryObserver.unobserve(entry.target);
+      lazyLoadImage(entry.target);
+    });
+  }, { rootMargin: "240px 0px" });
+  images.forEach((image) => galleryObserver.observe(image));
 }
 
 function renderGallery() {
@@ -663,21 +661,7 @@ function renderGallery() {
   grid.innerHTML = galleryItems.map(galleryCardHTML).join("");
   const status = $("galleryStatus");
   if (status) status.textContent = `${galleryItems.length} momen terabadikan`;
-  requestAnimationFrame(applyGalleryCoverflow);
-}
-
-function setGallerySlide(index) {
-  if (!galleryItems.length) return;
-  activeGallery = ((index % galleryItems.length) + galleryItems.length) % galleryItems.length;
-  applyGalleryCoverflow();
-}
-
-function nextGallery() {
-  setGallerySlide(activeGallery + 1);
-}
-
-function prevGallery() {
-  setGallerySlide(activeGallery - 1);
+  requestAnimationFrame(initGalleryLazyLoad);
 }
 
 function buildLightbox() {
@@ -692,6 +676,7 @@ function buildLightbox() {
     <button class="lightbox-nav prev" type="button" aria-label="Foto sebelumnya">‹</button>
     <figure class="lightbox-figure">
       <img class="lightbox-img" alt="" draggable="false">
+      <p class="lightbox-fallback" hidden>Foto tidak dapat dimuat.</p>
       <figcaption class="lightbox-caption">
         <span class="lightbox-title"></span>
         <span class="lightbox-count"></span>
@@ -727,11 +712,26 @@ function updateLightbox() {
   if (!lightboxEl || !galleryItems.length) return;
   const item = galleryItems[activeGallery];
   const image = lightboxEl.querySelector(".lightbox-img");
-  if (!item) return;
+  const fallback = lightboxEl.querySelector(".lightbox-fallback");
+  if (!item || !image) return;
+
+  image.hidden = false;
+  image.classList.remove("loaded");
+  if (fallback) fallback.hidden = true;
+  image.onload = () => image.classList.add("loaded");
+  image.onerror = () => {
+    image.hidden = true;
+    if (fallback) fallback.hidden = false;
+  };
   image.src = item.img;
   image.alt = item.title;
   lightboxEl.querySelector(".lightbox-title").textContent = item.title;
   lightboxEl.querySelector(".lightbox-count").textContent = `${activeGallery + 1} / ${galleryItems.length}`;
+
+  const single = galleryItems.length < 2;
+  lightboxEl.querySelectorAll(".lightbox-nav").forEach((button) => {
+    button.hidden = single;
+  });
 }
 
 function openLightbox(index) {
@@ -740,7 +740,6 @@ function openLightbox(index) {
   activeGallery = ((index % galleryItems.length) + galleryItems.length) % galleryItems.length;
   lastFocusBeforeLightbox = document.activeElement;
   updateLightbox();
-  applyGalleryCoverflow();
   lightboxOpen = true;
   lightboxEl.inert = false;
   lightboxEl.setAttribute("aria-hidden", "false");
@@ -769,7 +768,7 @@ function isLightboxOpen() {
 
 function lightboxStep(direction) {
   if (!galleryItems.length) return;
-  setGallerySlide(activeGallery + (direction > 0 ? 1 : -1));
+  activeGallery = (activeGallery + direction + galleryItems.length) % galleryItems.length;
   updateLightbox();
 }
 
@@ -878,26 +877,58 @@ function renderTimeline() {
 
 /* ------------------------------------------------------------
    STATISTIK DINAMIS
+   Semua angka diambil dari sumber data yang sama dengan daftar
+   anggota, galeri, kegiatan, dan playlist. Nilai 0 tetap valid;
+   data yang tidak tersedia ditandai dengan tanda pisah.
    ------------------------------------------------------------ */
-function countTarget(name, element) {
-  const explicit = Number(element.dataset.target);
-  if (Number.isFinite(explicit) && explicit > 0) return explicit;
-  const map = {
-    members: members.length,
-    classes: 1,
-    activities: activities.length,
-    gallery: galleryItems.length,
-    playlist: playlist.length,
-  };
-  return map[name] ?? 0;
+const CLASS_COUNT = 1; // Situs ini mewakili satu kelas: RPL B.
+
+const statSources = {
+  members: () => (Array.isArray(members) ? members.length : null),
+  classes: () => CLASS_COUNT,
+  activities: () => (Array.isArray(activities) ? activities.length : null),
+  gallery: () => (Array.isArray(galleryItems) ? galleryItems.length : null),
+  playlist: () => (Array.isArray(playlist) ? playlist.length : null),
+};
+
+function resolveStat(name) {
+  const source = statSources[name];
+  if (typeof source !== "function") return null;
+  const value = source();
+  return Number.isInteger(value) && value >= 0 ? value : null;
 }
 
 function syncDataCounts() {
+  let hasError = false;
+  let hasEmpty = false;
+
   document.querySelectorAll("[data-count]").forEach((element) => {
-    const target = countTarget(element.dataset.count, element);
-    element.dataset.target = String(target);
-    if (!element.classList.contains("stat-num")) element.textContent = String(target);
+    const value = resolveStat(element.dataset.count);
+    element.classList.remove("is-loading");
+    if (value === null) {
+      hasError = true;
+      element.dataset.state = "error";
+      element.textContent = "—";
+      element.setAttribute("aria-label", "Data belum tersedia");
+      return;
+    }
+    element.removeAttribute("aria-label");
+    element.dataset.state = value === 0 ? "empty" : "ready";
+    if (value === 0) hasEmpty = true;
+    element.textContent = String(value);
   });
+
+  const statsWrap = $("heroStats");
+  if (statsWrap) statsWrap.setAttribute("aria-busy", "false");
+
+  const statsStatus = $("statsStatus");
+  if (statsStatus) {
+    statsStatus.textContent = hasError
+      ? "Sebagian statistik belum tersedia."
+      : hasEmpty
+        ? "Statistik kelas dimuat. Beberapa data masih kosong."
+        : "Statistik kelas berhasil dimuat.";
+  }
 
   const memberStatus = $("memberStatus");
   if (memberStatus) memberStatus.textContent = `Menampilkan ${members.length} taruna/i`;
@@ -907,44 +938,6 @@ function syncDataCounts() {
   if (mpTrackNum) mpTrackNum.textContent = `1 / ${playlist.length}`;
   const mpListCount = $("mpListCount");
   if (mpListCount) mpListCount.textContent = String(playlist.length);
-}
-
-function animateStat(element) {
-  if (element.dataset.counted === "1") return;
-  element.dataset.counted = "1";
-  const target = Number(element.dataset.target) || 0;
-  if (reduceMotion || target === 0) {
-    element.textContent = String(target);
-    return;
-  }
-  const duration = 850;
-  const started = performance.now();
-  element.textContent = "0";
-  function frame(now) {
-    const progress = Math.min(1, (now - started) / duration);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    element.textContent = String(Math.round(target * eased));
-    if (progress < 1) requestAnimationFrame(frame);
-    else element.textContent = String(target);
-  }
-  requestAnimationFrame(frame);
-}
-
-function initCounters() {
-  const stats = document.querySelectorAll(".stat-num[data-target]");
-  if (!stats.length) return;
-  if (reduceMotion || !("IntersectionObserver" in window)) {
-    stats.forEach((stat) => { stat.textContent = stat.dataset.target || "0"; });
-    return;
-  }
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      animateStat(entry.target);
-      observer.unobserve(entry.target);
-    });
-  }, { threshold: 0.4 });
-  stats.forEach((stat) => observer.observe(stat));
 }
 
 /* ------------------------------------------------------------
@@ -1047,6 +1040,7 @@ function mpUpdateProgress() {
   seek.max = total > 0 ? String(total) : "100";
   seek.value = String(total > 0 ? position : 0);
   seek.style.setProperty("--seek", `${percent}%`);
+  seek.setAttribute("aria-valuetext", `${mpFmtTime(position)} dari ${mpFmtTime(total)}`);
   if (current) current.textContent = mpFmtTime(position);
   if (duration) duration.textContent = mpFmtTime(total);
 }
@@ -1058,7 +1052,14 @@ function mpLoadTrack(index, autoplay) {
   }
   mpCurrentTrack = ((index % playlist.length) + playlist.length) % playlist.length;
   const track = mpTrack();
-  mpSetStatus("");
+  if (!track.file) {
+    updatePlayerUI();
+    mpIsPlaying = false;
+    mpSetStatus("Sumber audio untuk lagu ini tidak tersedia.", "error");
+    return;
+  }
+  if (autoplay) mpSetStatus("Memuat lagu…", "info");
+  else mpSetStatus("");
   mpAudio.src = track.file;
   mpAudio.loop = mpIsLooping;
   if ($("mpSeek")) {
@@ -1088,6 +1089,7 @@ function mpTogglePlay() {
   }
   if (mpAudio.paused || mpAudio.ended) {
     if (!mpAudio.src) mpLoadTrack(mpCurrentTrack, false);
+    mpSetStatus("Memuat lagu…", "info");
     mpAudio.play().then(() => {
       mpSetStatus("");
     }).catch((error) => {
@@ -1520,6 +1522,7 @@ function initContactForm() {
       submit.disabled = true;
       submit.innerHTML = '<span class="btn-label">Mengirim…</span>';
     }
+    form.setAttribute("aria-busy", "true");
     setFormStatus("Sedang mengirim pesan…", "");
 
     window.emailjs.send(
@@ -1540,6 +1543,7 @@ function initContactForm() {
         label: "Kirim lewat email",
       });
     }).finally(() => {
+      form.setAttribute("aria-busy", "false");
       if (submit) {
         submit.disabled = false;
         submit.innerHTML = originalLabel;
@@ -1651,7 +1655,6 @@ function initScroll() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
       applyMemberCoverflow();
-      applyGalleryCoverflow();
     }, 160);
   }, { passive: true });
 
@@ -1678,19 +1681,13 @@ function initReveal() {
 function focusedCarousel() {
   const active = document.activeElement;
   if (!active || !active.closest) return null;
-  if (active.closest("#gallery")) return "gallery";
   if (active.closest("#anggota")) return "member";
   return null;
 }
 
 function centeredCarousel() {
   const middle = window.innerHeight / 2;
-  const gallery = $("gallery");
   const membersSection = $("anggota");
-  if (gallery) {
-    const rect = gallery.getBoundingClientRect();
-    if (rect.top <= middle && rect.bottom >= middle) return "gallery";
-  }
   if (membersSection) {
     const rect = membersSection.getBoundingClientRect();
     if (rect.top <= middle && rect.bottom >= middle) return "member";
@@ -1740,12 +1737,10 @@ function initKeyboard() {
     if (!carousel) return;
     if (event.key === "ArrowRight") {
       event.preventDefault();
-      if (carousel === "gallery") nextGallery();
-      else nextMember();
+      nextMember();
     } else if (event.key === "ArrowLeft") {
       event.preventDefault();
-      if (carousel === "gallery") prevGallery();
-      else prevMember();
+      prevMember();
     }
   });
 }
@@ -1806,20 +1801,14 @@ function initGridInteractions() {
   if (galleryGrid) {
     galleryGrid.addEventListener("click", (event) => {
       const card = event.target.closest(".gallery-card");
-      if (!card) return;
-      const slide = card.closest(".coverflow-slide");
-      const slides = Array.from(galleryGrid.querySelectorAll(".coverflow-slide"));
-      const index = slides.indexOf(slide);
-      if (index < 0) return;
-      if (index === activeGallery) openLightbox(index);
-      else setGallerySlide(index);
+      if (!card || card.classList.contains("error")) return;
+      const index = Number(card.dataset.index);
+      if (Number.isInteger(index)) openLightbox(index);
     });
   }
 
   const memberStage = $("memberStage");
-  const galleryStage = $("galleryStage");
   bindSwipe(memberStage, nextMember, prevMember);
-  bindSwipe(galleryStage, nextGallery, prevGallery);
 }
 
 function initPageNavigation() {
@@ -1857,7 +1846,6 @@ function init() {
   renderTimeline();
   renderPlaylist();
   initPlayer();
-  initCounters();
   initContactForm();
   initPlayerSuppression();
   initReveal();
