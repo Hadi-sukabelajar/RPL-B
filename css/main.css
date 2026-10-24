@@ -5373,8 +5373,8 @@ body:after {
   display: none;
 }
 
-/* Hentikan animasi dekoratif terus-menerus; sisakan code rain + caret */
-.orbit,
+/* Hentikan animasi dekoratif terus-menerus; orbit tetap berputar
+   seperti "planet" dan code rain + caret tetap aktif. */
 .terminal-card,
 .hero-chip,
 .eyebrow-dot {
