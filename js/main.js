@@ -358,6 +358,7 @@ const playlist = [
   { file: "sesi-potret.mp3", title: "Sesi potret", artist: "enau" },
   { file: "titik-titik.mp3", title: "Ada Titik Titik di Ujung Doa", artist: "Sal Priadi" },
   { file: "masa-kini.mp3", title: "Masa kini", artist: "Nuca" },
+  { file: "tarot.mp3", title: "Tarot", artist: "Feast" },
 ].map((track) => ({ ...track, file: `${ASSET_PATHS.audio}${track.file}` }));
 
 const EMAILJS_PUBLIC_KEY = "TFJRSpdswZBMvQ9Iv";
