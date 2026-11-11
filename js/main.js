@@ -992,8 +992,6 @@ let mpAutoplayArmed = false;
 
 const ICON_PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" /></svg>';
 const ICON_PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM14 5h4v14h-4z" /></svg>';
-const ICON_SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke-linecap="round" /></svg>';
-const ICON_MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z" stroke-linecap="round" stroke-linejoin="round" /></svg>';
 const ICON_VOL_HIGH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4zM15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" stroke-linecap="round" stroke-linejoin="round" /></svg>';
 const ICON_VOL_LOW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4zM15.5 8.5a5 5 0 0 1 0 7" stroke-linecap="round" stroke-linejoin="round" /></svg>';
 const ICON_VOL_MUTE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4zM16 9l5 6M21 9l-5 6" stroke-linecap="round" stroke-linejoin="round" /></svg>';
@@ -1381,29 +1379,8 @@ function initPlayer() {
 }
 
 /* ------------------------------------------------------------
-   TEMA, TOAST & KUNCI SCROLL
+   TOAST & KUNCI SCROLL
    ------------------------------------------------------------ */
-function applyTheme(theme, notify) {
-  const next = theme === "light" ? "light" : "dark";
-  document.documentElement.dataset.theme = next;
-  const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", next === "dark" ? "#070b0d" : "#f4f8f6");
-
-  const button = $("themeBtn");
-  if (button) {
-    button.innerHTML = next === "dark" ? ICON_SUN : ICON_MOON;
-    button.title = next === "dark" ? "Ganti ke mode terang" : "Ganti ke mode gelap";
-    button.setAttribute("aria-label", next === "dark" ? "Ganti ke mode terang" : "Ganti ke mode gelap");
-  }
-  if (notify) showToast(next === "dark" ? "Mode gelap aktif" : "Mode terang aktif");
-}
-
-function toggleTheme() {
-  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-  applyTheme(next, true);
-  storage.set("rplb-theme", next);
-}
-
 function showToast(message) {
   const toast = $("toast");
   if (!toast) return;
@@ -1933,7 +1910,6 @@ function initPageNavigation() {
 }
 
 function init() {
-  applyTheme(document.documentElement.dataset.theme || "dark", false);
   syncDataCounts();
   renderWaliKelas();
   renderMembers();
