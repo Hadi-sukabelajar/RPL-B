@@ -184,11 +184,11 @@ const memberPhotos = [
 ];
 
 const waliKelas = {
-  name: "Iwan Permana, S.Kom",
+  name: "Iwan Permana, S.Tr.Kom",
   nip: "",
   subject: "Rekayasa Perangkat Lunak",
   motto: "Mendidik dengan hati, membimbing dengan ilmu.",
-  photo: "",
+  photo: "pa iwan.jpeg",
   initial: "IP",
   color: "#65d7c8",
 };
@@ -248,6 +248,9 @@ const galleryItems = [
   ["Gerbang.jpg", "Gerbang Sekolah"],
   ["KELAS.jpg", "MPLS DAY 1"],
   ["l.jpeg", "Poto MPLS"],
+  ["mpls 7.jpeg","poto MPLS"],
+  ["mpls 8.jpeg","poto MPLS"],
+  ["mpls 9.jpeg","poto MPLS"],
   ["rp.jpeg", "Poto LATDASTAR"],
   ["long (1).jpg", "Poto LATDASTAR"],
   ["long (2).jpg", "Poto LATDASTAR"],
@@ -291,11 +294,14 @@ const galleryItems = [
   ["BATIKDAY6.jpg", "Batik Day"],
   ["BATIKDAY7.jpg", "Batik Day"],
   ["BBOYS.jpg", "Boys Day"],
+  ["menang lomba.jpeg","memenangkan lomba pancak silat"],
   ["CIHEULEUT1.jpg", "Poto di Ciheuleut"],
   ["CIHEULEUT2.jpg", "Poto di Ciheuleut"],
   ["JAKI1.jpg", "Poto di Jaki"],
   ["JAKI2.jpg", "Poto di Jaki"],
   ["JENGUKAHMAD.jpg", "Jenguk Ahmad"],
+  ["kunjungan puskesmas 1.jpeg","kunjungna dari puskesmas"],
+  ["kunjungan puskesmas 2.jpeg","kunjungan dari puskesmas"],
   ["KKRI1.jpg", "KKRI"],
   ["KKRI2.jpg", "KKRI"],
   ["pembuatan tugu kkri(1).jpeg", "poto pas pembuatan tugu kkri"],
